@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db import connection
+import json
 
 
 # Create your views here.
@@ -11,9 +12,14 @@ def index(request):
         cursor.execute(query)
         row = cursor.fetchall()
         print(row)
+        l = []
+        for x in row:
+            temp = []
+            for y in x:
+                temp.append(y)
+            l.append(temp)
         context = {
-            'name': row[0][0],
-            'age': row[0][1],
+            'id': l
         }
 
     return render(request, 'index.html',context)
