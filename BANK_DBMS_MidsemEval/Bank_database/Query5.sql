@@ -1,0 +1,1 @@
+select accountNUMBER from cards where accountNUMBER in (select accountNUMBER from account where balence > '$31624.49')

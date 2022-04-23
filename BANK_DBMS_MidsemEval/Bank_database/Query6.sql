@@ -1,0 +1,1 @@
+select customerID, customerNAME from customer where exists(select customer.customerID from customer inner join loan on customer.customerID=loan.customerID where customer.creditSCORE < 200)

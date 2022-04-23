@@ -1,0 +1,1 @@
+update banker set salary = '$10000' where year(curdate()) - joiningYEAR >= 20

@@ -1,0 +1,1 @@
+select customerID, customerNAME from customer where creditSCORE > 300 and customerID in (select customerID from account where balence > '$31624.49')

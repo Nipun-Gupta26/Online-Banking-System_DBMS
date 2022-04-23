@@ -1,0 +1,1 @@
+SELECT customer.customerID, customer.customerNAME FROM loan INNER JOIN customer ON loan.customerID = customer.customerID

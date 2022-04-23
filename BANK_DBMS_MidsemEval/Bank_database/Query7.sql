@@ -1,0 +1,1 @@
+select customerNAME, customerID from customer where customerID in (select customerID from services where serviceTYPE = 'deposit')
