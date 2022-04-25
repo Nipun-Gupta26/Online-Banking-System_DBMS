@@ -3,8 +3,7 @@ from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
 
-
-# Create your views here.
+##classes 
 class curUser:
     userID = ''
     password = ''
@@ -14,6 +13,8 @@ class curUser:
     
     def setPassword(self, password):
         self.password = password
+
+# Create your views here.
     
 user = curUser()
 
@@ -33,14 +34,18 @@ def home_banker(request) :
 
 def loginrequest(request):
     if request.method == 'POST':
+        
         userID = request.POST['userID']
         password = request.POST['password']
+        
         with connection.cursor() as cursor:
             query = "select * from user where userID = {} and password = '{}'".format(userID, password)
             print(query)
+            
             cursor.execute(query)
             row = cursor.fetchall()
             print(row, len(row))
+            
             if len(row) == 1:
                 query2 = 'select count(*) from customer where userID = {}'.format(userID)
                 cursor.execute(query2)
