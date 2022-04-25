@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
-from utils import *
+from banking_app import utils
+
 
 ##classes 
 class curUser:
@@ -57,7 +58,7 @@ def loginrequest(request):
                 if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
-                    cust_views(temp[0][0])
+                    utils.cust_views(temp[0][0])
                     return redirect('/home_customer')
 
                 query3 = 'select empID from banker where userID = {}'.format(userID)
@@ -90,7 +91,7 @@ def home_banker(request) :
 def sign_out(request):
     user.setUserID('')
     user.setPassword('')
-    del_cust_views()
+    utils.del_cust_views()
     return redirect('/')
 
 def make_account(request):
@@ -102,4 +103,7 @@ def make_account(request):
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
             temp = cursor.fetchnall()[0][0] + 1
-            query3 = "insert into account values ("
+            query3 = "insert into account values ()"
+            
+        
+        return 
