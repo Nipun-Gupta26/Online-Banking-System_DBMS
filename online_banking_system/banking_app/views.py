@@ -126,7 +126,7 @@ def make_account(request):
         if result[0][0] == 1:
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
-            acc_num = cursor.fetchall()[0][0] + 1
+            acc_num = 12345 + 1
             bal = request.POST['balance']
             accType = request.POST['accType']
             query3 = "select branchID from branch"
