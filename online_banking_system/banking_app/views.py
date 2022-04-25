@@ -64,6 +64,7 @@ def loginrequest(request):
                 query3 = 'select empID from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
+                print(temp)
                 if len(temp[0][0]) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
