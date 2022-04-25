@@ -18,6 +18,23 @@ class curUser:
     
 user = curUser()
 
+def profile(request) : 
+    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password})
+
+def home_customer(request):
+    context = {
+        'userID': user.userID,
+        'password': user.password
+    }
+    return render(request, 'home_customer.html', context)
+
+def home_banker(request) :
+    context = {
+        'userID': user.userID,
+        'password': user.password
+    }
+    return render(request, 'home_banker.html', context)
+
 def loginrequest(request):
     if request.method == 'POST':
         
