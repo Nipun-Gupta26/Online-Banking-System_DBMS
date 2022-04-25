@@ -119,7 +119,7 @@ def sign_out(request):
 def make_account(request):
     with connection.cursor() as cursor:
         
-        query1 = "select count(*) from verifies (where customerID in (select customerID from customer where userID = {})) and isVerified = {}".format(user.userID, 1)
+        query1 = "select count(*) from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {}))".format(1, user.userID)
         cursor.execute(query1)
         result = cursor.fetchall()
         
@@ -135,4 +135,7 @@ def make_account(request):
             branchID = result[randint(0, len(result) - 1)][0]
             query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
             cursor.execute(query4)
-        return 
+        return
+
+def account(request) :
+    return  render(request, 'make_account.html') 
