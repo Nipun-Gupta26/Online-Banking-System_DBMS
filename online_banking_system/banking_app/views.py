@@ -119,14 +119,14 @@ def sign_out(request):
 def make_account(request):
     with connection.cursor() as cursor:
         
-        query1 = "select count(*) from verifies (where customerID in (select customerID from customer where userID = {})) and isVerified = {}".format(user.userID, 1)
+        query1 = "select count(*) from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
         cursor.execute(query1)
         result = cursor.fetchall()
         
         if result[0][0] == 1:
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
-            acc_num = cursor.fetchnall()[0][0] + 1
+            acc_num = 12345 + 1
             bal = request.POST['balance']
             accType = request.POST['accType']
             query3 = "select branchID from branch"
