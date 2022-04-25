@@ -50,6 +50,7 @@ def home_banker(request) :
     return render(request, 'home_banker.html', context)
 
 def loginrequest(request):
+    
     if request.method == 'POST':
         
         userID = request.POST['userID']
@@ -117,9 +118,11 @@ def sign_out(request):
 
 def make_account(request):
     with connection.cursor() as cursor:
-        query1 = "select count(*) from verifies where customerID in (select customerID from customer where userID = {}) and isVerified = {}".format(user.userID, 1)
+        
+        query1 = "select count(*) from verifies (where customerID in (select customerID from customer where userID = {})) and isVerified = {}".format(user.userID, 1)
         cursor.execute(query1)
         result = cursor.fetchall()
+        
         if result[0][0] == 1:
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
