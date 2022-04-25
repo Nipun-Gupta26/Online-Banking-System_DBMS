@@ -35,19 +35,6 @@ user = curUser()
 def profile(request) : 
     return render(request, 'profile.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
 
-def home_customer(request):
-    context = {
-        'userID': user.userID,
-        'password': user.password
-    }
-    return render(request, 'home_customer.html', context)
-
-def home_banker(request) :
-    context = {
-        'userID': user.userID,
-        'password': user.password
-    }
-    return render(request, 'home_banker.html', context)
 
 def loginrequest(request):
     
@@ -79,13 +66,17 @@ def loginrequest(request):
                     cust_views(temp[0][0])
                     return redirect('/home_customer')
 
-                query3 = 'select empID from banker where userID = {}'.format(userID)
+                query3 = 'select empID,empName,empAddress,DOB from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
+                
                 print(temp)
                 if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
+                    user.setUserName(temp[0][1])
+                    user.setUserAddress(temp[0][2])
+                    user.setDOB(temp[0][3])
                     return redirect('/home_banker')
 
     return redirect('/')
@@ -106,7 +97,10 @@ def home_customer(request):
 def home_banker(request) :
     context = {
         'userID': user.userID,
-        'password': user.password
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
     }
     return render(request, 'home_banker.html', context)
 
@@ -137,5 +131,7 @@ def make_account(request):
                 query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
             cursor.execute(query4)
         redirect('/home_customer')
+        
+        return render(request, 'make_account.html')
 
  
