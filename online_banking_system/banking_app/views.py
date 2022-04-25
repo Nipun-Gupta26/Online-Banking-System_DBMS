@@ -140,5 +140,4 @@ def make_account(request):
         redirect('/home_customer')
     return render(request, 'makeAccount.html')
 
-def account(request) :
-    return  render(request, 'make_account.html') 
+ 

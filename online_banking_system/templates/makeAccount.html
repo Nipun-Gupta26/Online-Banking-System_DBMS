@@ -5,7 +5,7 @@
 {%endblock%}
 
 {%block body%}
-<form method = "post">
+<form method = "post" action={%url 'make_account'%}>
     {% csrf_token %}
     <h1 class="h3 mb-3 fw-normal">Make Account</h1>
     <div class="form-floating">
