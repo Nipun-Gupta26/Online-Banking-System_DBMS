@@ -4,7 +4,7 @@ def cust_views(customerID):
     with connection.cursor() as cursor:
         query1 = "create view accounts as select * from account where customerID = {}".format(customerID)
         query2 = "create view transactions as select * from transaction where customerID = {}".format(customerID)
-        query3 = "create view as loans as select * from loan where customerID = {}".format(customerID)
+        query3 = "create view loans as select * from loan where customerID = {}".format(customerID)
         cursor.execute(query1)
         cursor.execute(query2)
         cursor.execute(query3)

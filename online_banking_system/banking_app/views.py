@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
-from utils import *
+from banking_app.utils import *
 
 ##classes 
 class curUser:
@@ -57,13 +57,14 @@ def loginrequest(request):
                 if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
+                    del_cust_views()
                     cust_views(temp[0][0])
                     return redirect('/home_customer')
 
                 query3 = 'select empID from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
-                if len(temp[0][0]) == 1:
+                if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
                     return redirect('/home_banker')
