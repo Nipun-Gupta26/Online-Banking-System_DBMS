@@ -1,4 +1,9 @@
-<!DOctype html>
-banker <br>
-userID: {{userID}} <br>
-password: {{password}}
+<!Doctype html>
+{%extends 'base.html'%}
+{%block content%}
+{{userID}}
+{%endblock%}
+
+{%block body%}
+<p><b>Banker</b> <br>userID: {{userID}} <br>password: {{password}}</p>
+{%endblock%}

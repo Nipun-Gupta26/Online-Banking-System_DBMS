@@ -13,7 +13,7 @@
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
             <div class="container-fluid flex-row">
-              <a class="navbar-brand ms-4 p-2" href="#"><img src="static/icond.png" height="20" width="20"/>UnionBank</a>
+              <a class="navbar-brand ms-4" href="#"><img src="static/icond.png" height="20" width="20"/>UnionBank</a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -24,8 +24,8 @@
                       Accounts
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
-                      <li><a class="dropdown-item" href="/about">Another action</a></li>
+                      <li><a class="dropdown-item" href="/contact">Open a New Account</a></li>
+                      <li><a class="dropdown-item" href="/about">Passbook</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
@@ -35,8 +35,8 @@
                       Loans
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
-                      <li><a class="dropdown-item" href="/about">Another action</a></li>
+                      <li><a class="dropdown-item" href="/contact">Apply for Loan</a></li>
+                      <li><a class="dropdown-item" href="/about">Check Credit Score</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
@@ -46,8 +46,8 @@
                       BankCards
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/contact">Contact Us</a></li>
-                      <li><a class="dropdown-item" href="/about">Another action</a></li>
+                      <li><a class="dropdown-item" href="/contact">Apply for Bank Card</a></li>
+                      <li><a class="dropdown-item" href="/about">Renew Bank Card</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
@@ -57,7 +57,19 @@
                   </li>            
                 </ul>
               </div>
-              <a class="nav-link" style="color:white;" href="#">{%block content%}Login{%endblock%}</a>
+           
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle mb-4 ms-5 me-5" style="color:white;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {%block content%}Login{%endblock%}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                  <li><a class="dropdown-item" href="#">SignOut</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>  
+              
             </div>
           </nav>
           {% block body %}

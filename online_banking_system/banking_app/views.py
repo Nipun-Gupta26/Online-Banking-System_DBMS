@@ -18,6 +18,9 @@ class curUser:
     
 user = curUser()
 
+def profile(request) : 
+    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password})
+
 def home_customer(request):
     context = {
         'userID': user.userID,
