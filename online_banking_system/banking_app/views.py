@@ -8,19 +8,31 @@ from banking_app.utils import *
 class curUser:
     userID = ''
     password = ''
+    userName = ''
+    DOB = ''
+    userAddress = ''
 
     def setUserID(self, userID):
         self.userID = userID
     
     def setPassword(self, password):
         self.password = password
+        
+    def setUserName(self, userName):
+        self.userName = userName
+        
+    def setDOB(self, DOB):
+        self.DOB = DOB
+        
+    def setUserAddress(self, userAddress):
+        self.userAddress = userAddress
 
 # Create your views here.
     
 user = curUser()
 
 def profile(request) : 
-    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password})
+    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
 
 def home_customer(request):
     context = {
@@ -51,13 +63,16 @@ def loginrequest(request):
             print(row, len(row))
             
             if len(row) == 1:
-                query2 = 'select customerID from customer where userID = {}'.format(userID)
+                query2 = 'select customerID,customerName,customerAddress,DOB from customer where userID = {}'.format(userID)
                 cursor.execute(query2)
                 temp = cursor.fetchall()
                 print(temp)
                 if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
+                    user.setUserName(temp[0][1])
+                    user.setUserAddress(temp[0][2])
+                    user.setDOB(temp[0][3])
                     del_cust_views()
                     cust_views(temp[0][0])
                     return redirect('/home_customer')
@@ -79,7 +94,10 @@ def login(request):
 def home_customer(request):
     context = {
         'userID': user.userID,
-        'password': user.password
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
     }
     return render(request, 'home_customer.html', context)
 
