@@ -1,3 +1,4 @@
+from random import randint
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
@@ -103,8 +104,13 @@ def make_account(request):
         if result[0][0] == 1:
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
-            temp = cursor.fetchnall()[0][0] + 1
-            query3 = "insert into account values ()"
-            
-        
+            acc_num = cursor.fetchnall()[0][0] + 1
+            bal = request.POST['balance']
+            accType = request.POST['accType']
+            query3 = "select branchID from branch"
+            cursor.execute(query3)
+            result = cursor.fetchall()
+            branchID = result[randint(0, len(result) - 1)][0]
+            query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
+            cursor.execute(query4)
         return 
