@@ -135,4 +135,7 @@ def make_account(request):
             branchID = result[randint(0, len(result) - 1)][0]
             query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
             cursor.execute(query4)
-        return 
+        return
+
+def account(request) :
+    return  render(request, 'make_account.html') 
