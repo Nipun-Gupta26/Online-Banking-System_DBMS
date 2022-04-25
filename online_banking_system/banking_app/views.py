@@ -3,6 +3,7 @@ from django.db import connection
 from django.shortcuts import redirect
 from banking_app.utils import *
 
+
 ##classes 
 class curUser:
     userID = ''
@@ -103,4 +104,7 @@ def make_account(request):
             query2 = "select max(accNumber) from account"
             cursor.execute(query2)
             temp = cursor.fetchnall()[0][0] + 1
-            query3 = "insert into account values ("
+            query3 = "insert into account values ()"
+            
+        
+        return 

@@ -1,9 +1,13 @@
 <!DOctype html>
-{% comment %} user <br>
-userID: {{userID}} <br>
-password: {{password}} {% endcomment %}
+{%extends 'base.html'%}
+{%block content%}
 
+{%endblock%}
 
+{%block body%}
 <form method = "post">
     <button class = "btn btn-primary" type = "submit" name = "make_account" action = "/make_account">Make Account</button>
 </form>
+{%endblock%}
+
+
