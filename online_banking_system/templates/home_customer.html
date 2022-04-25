@@ -1,4 +1,9 @@
 <!DOctype html>
-user <br>
+{% comment %} user <br>
 userID: {{userID}} <br>
-password: {{password}}
+password: {{password}} {% endcomment %}
+
+
+<form method = "post">
+    <button class = "btn btn-primary" type = "submit" name = "make_account" action = "/make_account">Make Account</button>
+</form>
