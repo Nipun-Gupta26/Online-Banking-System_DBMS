@@ -117,25 +117,26 @@ def sign_out(request):
     return redirect('/')
 
 def make_account(request):
-    with connection.cursor() as cursor:
-        
-        query1 = "select count(*) from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
-        cursor.execute(query1)
-        result = cursor.fetchall()
-        
-        if result[0][0] == 1:
-            query2 = "select max(accNumber) from account"
-            cursor.execute(query2)
-            acc_num = 12345 + 1
-            bal = request.POST['balance']
-            accType = request.POST['accType']
-            query3 = "select branchID from branch"
-            cursor.execute(query3)
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            
+            query1 = "select count(*) from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
+            cursor.execute(query1)
             result = cursor.fetchall()
-            branchID = result[randint(0, len(result) - 1)][0]
-            query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
+            
+            if result[0][0] == 1:
+                query2 = "select max(accNumber) from account"
+                cursor.execute(query2)
+                acc_num = 12345 + 1
+                bal = request.POST.get('balance', False)
+                accType = request.POST.get('accType', False)
+                query3 = "select branchID from branch"
+                cursor.execute(query3)
+                result = cursor.fetchall()
+                branchID = result[randint(0, len(result) - 1)][0]
+                query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
             cursor.execute(query4)
-        return
+        redirect('/home_customer')
 
 def account(request) :
     return  render(request, 'make_account.html') 
