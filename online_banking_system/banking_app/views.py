@@ -136,5 +136,5 @@ def make_account(request):
             else:
                 return redirect('/home_customer')
         return redirect('/home_customer')
-    return render(request, 'makeAccount.html')
+    return render(request, 'customer/makeAccount.html')
 
