@@ -138,3 +138,6 @@ def make_account(request):
         return redirect('/home_customer')
     return render(request, 'customer/makeAccount.html')
 
+def generate_passbook(request):
+    with connection.cursor() as cursor:
+        query1 = "select customerID from "

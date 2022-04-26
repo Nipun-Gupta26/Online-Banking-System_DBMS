@@ -11,4 +11,5 @@ urlpatterns = [
     path('make_account', views.make_account, name='make_account'),
     path('sign_out', views.sign_out, name='sign_out'),
     path('profile',views.profile,name='profile'),
+    path('passbook', views.generate_passbook, name='passbook'),
 ]
