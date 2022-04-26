@@ -205,3 +205,8 @@ def apply_loan(request):
             cursor.execute(query2)
         return redirect('/home_customer')
     return render(request, 'customer/apply_loan.html')
+
+def make_transaction(request):
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            
