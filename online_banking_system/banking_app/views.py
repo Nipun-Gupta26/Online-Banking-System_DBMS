@@ -209,4 +209,5 @@ def apply_loan(request):
 def make_transaction(request):
     if request.method == 'POST':
         with connection.cursor() as cursor:
+            query1 = ""
             return
