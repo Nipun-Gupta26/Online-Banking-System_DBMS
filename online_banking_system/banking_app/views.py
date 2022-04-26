@@ -160,3 +160,14 @@ def generate_passbook(request):
         }
 
     return render(request, 'passbook.html', context)
+
+def active_loans(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select amount, dueDate, rate, mortagage, loanType from loans"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        context = {
+            'loans': result
+        }
+    return render(request, 'customer/activeLoans.html', context)
