@@ -1,12 +1,25 @@
 
 <!doctype html>
-{%extends 'base.html'%}
-{%block body%}
+<html>
+<head>
+  <!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<style>
+  body{
+    background-color:black;
+  }
+</style>
+</head>
+<body style="background-color:black;">
 <main class="form-signin">
   <form method = "post" action = {% url 'loginrequest'%}>
     {% csrf_token %}
     {% comment %} <img class="mb-4" src="/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> {% endcomment %}
-    <h1 class="mt-4" style="text-align:center; color:white; font-size:30px;">Portal SignIn</h1>
+    <h1 style="text-align:center; color:white; font-size:30px; margin-top : 10%;">Portal SignIn</h1>
 
     <div class="form-floating mt-5" style="margin-left:32%;">
       <input class="form-control" id="floatingInput" type = "text" placeholder="User ID" name = "userID" style="width:50%;">
@@ -21,4 +34,5 @@
     <button class="btn btn-lg btn-primary mt-5"style="margin-left:32%; width:34.3%;" type="submit">Sign in</button>
   </form>
 </main>   
-{% endblock %}
+</body>
+</html>

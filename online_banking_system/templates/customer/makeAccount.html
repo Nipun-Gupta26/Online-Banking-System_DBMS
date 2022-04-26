@@ -1,0 +1,28 @@
+{%extends 'customer/base_customer.html'%}
+
+{%block content%}
+{{userID}}
+{%endblock%}
+
+{%block body%}
+<form method = "post" action={%url 'make_account'%}>
+    {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Make Account</h1>
+    <div class="form-floating mt-5" style="margin-left:32%;">
+      <p style="color:white;">AccountType</p>
+      <select>
+        <option value="current">Current</option>
+        <option value="Savings">Savings</option>
+      </select>
+      
+    </div>
+    <br>
+    <div class="form-floating" style="margin-left:32%; height:1%;">
+      <p style="color:white;">Balance</p>
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name = "balance" style="width:30%;">
+     
+    </div>
+
+    <button class="btn btn-lg btn-primary mt-5" type="submit" style="margin-left : 32%; width:34.3%;">Create</button>
+  </form>
+{%endblock%}

@@ -1,4 +1,5 @@
 from random import randint
+import re
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
@@ -33,7 +34,7 @@ class curUser:
 user = curUser()
 
 def profile(request) : 
-    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
+    return render(request, 'customer/profile_customer.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
 
 
 def loginrequest(request):
@@ -64,7 +65,7 @@ def loginrequest(request):
                     user.setDOB(temp[0][3])
                     del_cust_views()
                     cust_views(temp[0][0])
-                    return redirect('/home_customer')
+                    return redirect('home_customer')
 
                 query3 = 'select empID,empName,empAddress,DOB from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
@@ -77,7 +78,7 @@ def loginrequest(request):
                     user.setUserName(temp[0][1])
                     user.setUserAddress(temp[0][2])
                     user.setDOB(temp[0][3])
-                    return redirect('/home_banker')
+                    return redirect('home_banker')
 
     return redirect('/')
 
@@ -92,7 +93,7 @@ def home_customer(request):
         'DOB': user.DOB,
         'userAddress': user.userAddress
     }
-    return render(request, 'home_customer.html', context)
+    return render(request, 'customer/home_customer.html', context)
 
 def home_banker(request) :
     context = {
@@ -102,7 +103,7 @@ def home_banker(request) :
         'DOB': user.DOB,
         'userAddress': user.userAddress
     }
-    return render(request, 'home_banker.html', context)
+    return render(request, 'banker/home_banker.html', context)
 
 def sign_out(request):
     user.setUserID('')
@@ -121,17 +122,16 @@ def make_account(request):
             if result[0][0] == 1:
                 query2 = "select max(accNumber) from account"
                 cursor.execute(query2)
-                acc_num = 12345 + 1
+                acc_num = cursor.fetchall()[0][0] + 1
                 bal = request.POST.get('balance', False)
                 accType = request.POST.get('accType', False)
                 query3 = "select branchID from branch"
                 cursor.execute(query3)
                 result = cursor.fetchall()
                 branchID = result[randint(0, len(result) - 1)][0]
-                query4 = "insert into account values ({}, {}, {}, {})".format(acc_num, bal, accType, branchID)
-            cursor.execute(query4)
-        redirect('/home_customer')
-        
-        return render(request, 'make_account.html')
+                query4 = "insert into account values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
+                cursor.execute(query4)
+        redirect('home_customer')
+    return render(request, 'customer/makeAccount.html')
 
- 
+
