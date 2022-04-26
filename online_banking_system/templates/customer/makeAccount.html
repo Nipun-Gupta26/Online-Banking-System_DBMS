@@ -8,21 +8,22 @@
 <form method = "post" action={%url 'make_account'%}>
     {% csrf_token %}
     <h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Make Account</h1>
-    <div class="form-floating mt-5" style="margin-left:32%;">
+    <div style="margin-left:37%;">
+    <div class="form-floating mt-5">
       <p style="color:white;">AccountType</p>
-      <select>
+      <select style="width:40%;" name="accType">
         <option value="current">Current</option>
         <option value="Savings">Savings</option>
       </select>
       
     </div>
     <br>
-    <div class="form-floating" style="margin-left:32%; height:1%;">
+    <div class="form-floating">
       <p style="color:white;">Balance</p>
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name = "balance" style="width:30%;">
-     
+      <input type="text" class="form-control" id="floatingPassword" placeholder="Password" name = "balance" style="width:40%; height:30px;">
     </div>
-
-    <button class="btn btn-lg btn-primary mt-5" type="submit" style="margin-left : 32%; width:34.3%;">Create</button>
+  
+    <button class="btn btn-lg btn-primary mt-5" type="submit" style="width:10%;">Create</button>
+  </div>
   </form>
 {%endblock%}
