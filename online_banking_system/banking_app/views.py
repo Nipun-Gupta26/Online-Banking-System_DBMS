@@ -34,21 +34,8 @@ class curUser:
 user = curUser()
 
 def profile(request) : 
-    return render(request, 'profile.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
+    return render(request, 'customer/profile_customer.html', {'userID': user.userID, 'password': user.password,'userName': user.userName, 'DOB': user.DOB, 'userAddress': user.userAddress})
 
-def home_customer(request):
-    context = {
-        'userID': user.userID,
-        'password': user.password
-    }
-    return render(request, 'home_customer.html', context)
-
-def home_banker(request) :
-    context = {
-        'userID': user.userID,
-        'password': user.password
-    }
-    return render(request, 'home_banker.html', context)
 
 def loginrequest(request):
     
@@ -78,16 +65,20 @@ def loginrequest(request):
                     user.setDOB(temp[0][3])
                     del_cust_views()
                     cust_views(temp[0][0])
-                    return redirect('/home_customer')
+                    return redirect('home_customer')
 
-                query3 = 'select empID from banker where userID = {}'.format(userID)
+                query3 = 'select empID,empName,empAddress,DOB from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
+                
                 print(temp)
                 if len(temp) == 1:
                     user.setUserID(userID)
                     user.setPassword(password)
-                    return redirect('/home_banker')
+                    user.setUserName(temp[0][1])
+                    user.setUserAddress(temp[0][2])
+                    user.setDOB(temp[0][3])
+                    return redirect('home_banker')
 
     return redirect('/')
 
@@ -102,14 +93,17 @@ def home_customer(request):
         'DOB': user.DOB,
         'userAddress': user.userAddress
     }
-    return render(request, 'home_customer.html', context)
+    return render(request, 'customer/home_customer.html', context)
 
 def home_banker(request) :
     context = {
         'userID': user.userID,
-        'password': user.password
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
     }
-    return render(request, 'home_banker.html', context)
+    return render(request, 'banker/home_banker.html', context)
 
 def sign_out(request):
     user.setUserID('')
@@ -144,4 +138,3 @@ def make_account(request):
         return redirect('/home_customer')
     return render(request, 'makeAccount.html')
 
- 
