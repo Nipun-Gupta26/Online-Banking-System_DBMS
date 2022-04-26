@@ -121,11 +121,11 @@ def make_account(request):
     if request.method == 'POST':
         with connection.cursor() as cursor:
             
-            query1 = "select count(*) from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
+            query1 = "select customerID from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
             cursor.execute(query1)
             result = cursor.fetchall()
             
-            if result[0][0] == 1:
+            if len(result) == 1:
                 query2 = "select max(accNumber) from account"
                 cursor.execute(query2)
                 acc_num = cursor.fetchall()[0][0] + 1
@@ -133,11 +133,15 @@ def make_account(request):
                 accType = request.POST.get('accType', False)
                 query3 = "select branchID from branch"
                 cursor.execute(query3)
-                result = cursor.fetchall()
-                branchID = result[randint(0, len(result) - 1)][0]
+                branchQ = cursor.fetchall()
+                branchID = branchQ[randint(0, len(branchQ) - 1)][0]
                 query4 = "insert into account values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
+                query5 = "insert into hasAccount values ({}, {})".format(result[0][0], acc_num)
                 cursor.execute(query4)
-        redirect('/home_customer')
+                cursor.execute(query5)
+            else:
+                return redirect('/home_customer')
+        return redirect('/home_customer')
     return render(request, 'makeAccount.html')
 
  
