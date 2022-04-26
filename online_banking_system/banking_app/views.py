@@ -141,19 +141,20 @@ def make_account(request):
 def approveLoans(request) : 
     if request.method == "POST" :
         
-        cid = request.POST.get('cid', False)
-        
         with connection.cursor() as cursor : 
             
-            query = 'select creditScore from customer where userID = {}'.format(cid)
+            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
             cursor.execute(query)
             result = cursor.fetchall()
             
             print(result)
 
-    return render(request, 'banker/credit_score.html')
+    return render(request, 'banker/approve_loans.html')
+
 def generate_passbook(request):
+    
     context = {}
+    
     with connection.cursor() as cursor:
         query1 = "select customerID from user where userID = {}".format(user.userID)
         cursor.execute(query1)

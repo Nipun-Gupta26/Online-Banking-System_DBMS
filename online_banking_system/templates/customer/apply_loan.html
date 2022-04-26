@@ -1,0 +1,17 @@
+{%extends 'customer/base_customer.html'%}
+{%block body%}
+    <form method="POST" action={%url 'apply_loan'%}>
+        <div>
+            <label for="amountID">Amount</label>
+            <input type="text" name="amount" id="amountID"></input>
+        </div>
+        <div>
+            <label for="mortgageID">Mortgage</label>
+            <input type="text" name="mortgage" id="mortgageID"></input>
+        </div>
+        <div>
+            <label for="amountID">Amount</label>
+            <input type="text" name="" id="amountID"></input>
+        </div>
+    </form>
+{%endblock%}
