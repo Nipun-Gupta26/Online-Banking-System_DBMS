@@ -153,5 +153,35 @@ def approveLoans(request) :
 
     return render(request, 'banker/credit_score.html')
 def generate_passbook(request):
+    context = {}
     with connection.cursor() as cursor:
-        query1 = "select customerID from "
+        query1 = "select customerID from user where userID = {}".format(user.userID)
+        cursor.execute(query1)
+        cid = cursor.fetchall()[0][0]
+        query2 = "select * from transactions where customerCredited = {} and customerDebited != {}".format(cid, cid)
+        query3 = "select * from transactions where customerDebited = {} and customerCredited != {}".format(cid, cid)
+        query4 = "select * from transactions where customerCredited = {} and customerDebited = {}".format(cid, cid)
+        cursor.execute(query2)
+        credit = cursor.fetchall()
+        cursor.execute(query3)
+        debited = cursor.fetchall()
+        cursor.execute(query4)
+        both = cursor.fetchall()
+        context = {
+            'credit': credit, 
+            'debited': debited, 
+            'both': both
+        }
+
+    return render(request, 'passbook.html', context)
+
+def active_loans(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select amount, dueDate, rate, mortagage, loanType from loans"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        context = {
+            'loans': result
+        }
+    return render(request, 'customer/activeLoans.html', context)
