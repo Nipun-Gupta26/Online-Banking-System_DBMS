@@ -1,6 +1,7 @@
 {%extends 'customer/base_customer.html'%}
 {%block body%}
     <form method="POST" action={%url 'apply_loan'%}>
+        {%csrf_token%}
         <div>
             <label for="amountID">Amount</label>
             <input type="text" name="amount" id="amountID"></input>
@@ -13,5 +14,6 @@
             <label for="loanTypeID">Loan Type</label>
             <input type="text" name="loanType" id="loanTypeID"></input>
         </div>
+        <button class="btn btn-lg btn-primary mt-5"style="margin-left:32%; width:34.3%;" type="submit">Apply</button>
     </form>
 {%endblock%}

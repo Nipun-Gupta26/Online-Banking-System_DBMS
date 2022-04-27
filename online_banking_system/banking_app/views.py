@@ -196,12 +196,12 @@ def apply_loan(request):
             amount = request.POST.get('amount', False)
             mortagage = request.POST.get('mortagage', False)
             loanType = request.POST.get('loanType', False)
-            query1 = "select max(loanID) from loans"
+            query1 = "select max(loanID) from loan"
             cursor.execute(query1)
             loanID = cursor.fetchall()[0][0] + 1
-            query1 = "insert into loan values ({}, {}, {}, {}, {}, {}, {})".format(loanID, amount, datetime.now() + timedelta(days = 30), 7.2, mortagage, loanType, 1)
+            query1 = "insert into loan(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({}, {}, {}, {}, {}, {}, {})".format(loanID, amount, datetime.date(), 7, mortagage, loanType, 1)
             cursor.execute(query1)
-            query2 = "insert into borrows values ({}, {}, {})".format(loanID, 69, customerID)
+            query2 = "insert into borrows(loanID,branchID,customerID) values ({}, {}, {})".format(loanID, 69, customerID)
             cursor.execute(query2)
         return redirect('/home_customer')
     return render(request, 'customer/apply_loan.html')
