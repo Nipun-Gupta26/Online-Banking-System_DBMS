@@ -118,7 +118,6 @@ def make_account(request):
             query1 = "select customerID from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
             cursor.execute(query1)
             result = cursor.fetchall()
-            
             if len(result) == 1:
                 query2 = "select max(accNumber) from account"
                 cursor.execute(query2)
@@ -209,4 +208,9 @@ def apply_loan(request):
 def make_transaction(request):
     if request.method == 'POST':
         with connection.cursor() as cursor:
-            query1 = 
+            accCredited = request.POST.get('accCredited', False)
+            accDebited = request.POST.get('accDebited', False)
+            amount = request.POST.get('amount', False)
+            password = request.POST.get('password', False)
+            if password == user.password:
+                query1 = ""
