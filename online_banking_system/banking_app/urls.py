@@ -15,4 +15,5 @@ urlpatterns = [
     path('approve_loans',views.approveLoans,name='approve_loans'),
     path('active_loans', views.active_loans, name='active_loans'),
     path('apply_loan', views.apply_loan, name='apply_loan'),
+    path('submit_documents', views.submit_documents, name='submit_documents'),
 ]
