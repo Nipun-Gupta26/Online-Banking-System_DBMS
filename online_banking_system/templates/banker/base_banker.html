@@ -28,7 +28,11 @@
                       Accounts
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="/verify_documents">DocumentVerification</a></li>
+                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=1%}">Verify Pan</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=2%}">Verify Passport</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=3%}">Verify Aadhar</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="/view_accounts">View Accounts</a></li>
                       
@@ -51,7 +55,11 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                       <li><a class="dropdown-item" href="/about">Renew Bank Card</a></li>
                     </ul>
-                  </li>            
+                  </li> 
+                    <a class="nav-link ms-3" href="/stats" id="navbarDropdown" role="button" style="color:white;">
+                      Stats
+                    </a>
+                          
                 </ul>
               </div>
            

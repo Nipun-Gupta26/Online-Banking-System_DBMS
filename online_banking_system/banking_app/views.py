@@ -161,9 +161,9 @@ def generate_passbook(request):
         query1 = "select customerID from customer where userID = {}".format(user.userID)
         cursor.execute(query1)
         cid = cursor.fetchall()[0][0]
-        query2 = "select * from transactions where customerCredited = {} and customerDebited != {}".format(cid, cid)
-        query3 = "select * from transactions where customerDebited = {} and customerCredited != {}".format(cid, cid)
-        query4 = "select * from transactions where customerCredited = {} and customerDebited = {}".format(cid, cid)
+        query2 = "select * from transactions where accCredited not in (select accNumber from hasAccount where customerID={}) and accDebited in (select accNumber from hasAccount where customerID={})".format(cid, cid)
+        query3 = "select * from transactions where accCredited in (select accNumber from hasAccount where customerID={}) and accDebited not in (select accNumber from hasAccount where customerID={})".format(cid, cid)
+        query4 = "select * from transactions where accCredited in (select accNumber from hasAccount where customerID={}) and accDebited in (select accNumber from hasAccount where customerID={})".format(cid, cid)
         cursor.execute(query2)
         credit = cursor.fetchall()
         cursor.execute(query3)
@@ -172,7 +172,7 @@ def generate_passbook(request):
         both = cursor.fetchall()
         context = {
             'credit': credit, 
-            'debited': debited, 
+            'debit': debited, 
             'both': both,
             'user':user
         }
@@ -260,13 +260,13 @@ def make_transaction(request):
                     query4 = "select max(transactionID) from transaction"
                     cursor.execute(query4)
                     transactionID = cursor.fetchall()[0][0] + 1
-                    query5 = "select customerID from hasAccount where accNumber = {}".format(accDebited)
-                    cursor.execute(query5)
-                    cusDeb = cursor.fetchall()[0][0]
-                    query6 = "select customerID from hasAccount where accNumber = {}".format(accCredited)
-                    cursor.execute(query6)
-                    cusCred = cursor.fetchall()[0][0]
-                    query7 = "insert into transactions values ({}, {}, {}, {}, {}, {})".format(transactionID, cusCred, accCredited,accDebited, cusDeb, amount)
+                    # query5 = "select customerID from hasAccount where accNumber = {}".format(accDebited)
+                    # cursor.execute(query5)
+                    # cusDeb = cursor.fetchall()[0][0]
+                    # query6 = "select customerID from hasAccount where accNumber = {}".format(accCredited)
+                    # cursor.execute(query6)
+                    # cusCred = cursor.fetchall()[0][0]
+                    query7 = "insert into transactions values ({}, {}, {}, {})".format(transactionID, accCredited,accDebited, amount)
                     cursor.execute(query7)
                 else:
                     messages.error(request, "Amount more than Balance")
@@ -356,9 +356,16 @@ def check_loan_profile(request,loanID) :
     return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
 
 
-def verify_documents(request):
+def verify_documents(request,verbose):
     with connection.cursor() as cursor:
-        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {})".format(0)
+        if verbose == 1:
+            docType = "Pan card"
+        elif verbose == 2:
+            docType="Passport"
+        else: 
+            docType="Aadhar card"
+                    
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {}) and documentType='{}'".format(0,docType)
         cursor.execute(query1)
         result = cursor.fetchall()
         arr = []
@@ -374,6 +381,8 @@ def verify_documents(request):
             'user':user,
         }
     return render(request, 'banker/verify_documents.html',context)
+
+
 
 def document_profile(request,customerID):
     context = {}
@@ -440,6 +449,26 @@ def view_accounts(request):
     return render(request, 'banker/view_accounts.html',context)
         
 
-
-
-    
+def stats(request) : 
+    with connection.cursor() as cursor : 
+        query = 'select count(*) from customer where creditScore > 5.0'
+        cursor.execute(query)
+        result = cursor.fetchall()
+        customer_count = result[0][0]
+        query2 = 'select count(*) from account where balance > 10000'
+        cursor.execute(query2)
+        result = cursor.fetchall()
+        acc_count = result[0][0]
+        query3 = 'select max(balance) from account'
+        cursor.execute(query3)
+        result = cursor.fetchall()
+        max_bal = result[0][0]
+        
+        context = {
+            'user':user,
+            'customer_count':customer_count,
+            'account_count':acc_count,
+            'max_bal':max_bal
+        }
+        
+    return render(request, 'banker/stats.html',context)
