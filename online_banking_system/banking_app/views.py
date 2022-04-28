@@ -320,3 +320,9 @@ def submit_documents(request):
             cursor.execute(query6)
         return redirect('/home_customer')
     return render(request, 'customer/submit_documents.html')
+
+
+#banker functions
+
+def verify_documents(request):
+    pass
