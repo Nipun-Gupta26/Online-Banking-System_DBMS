@@ -351,5 +351,5 @@ def submit_documents(request):
 
 #banker functions
 
-def verify_documents(request):
-    pass
+
+    
