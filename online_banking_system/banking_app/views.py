@@ -70,7 +70,7 @@ def loginrequest(request):
                     cust_views(temp[0][0])
                     return redirect('home_customer')
 
-                query3 = 'select empID,empName,empAddress,DOB from banker where userID = {}'.format(userID)
+                query3 = 'select empID,empName,empAddress,DOB, branchID from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
                 
@@ -81,6 +81,8 @@ def loginrequest(request):
                     user.setUserName(temp[0][1])
                     user.setUserAddress(temp[0][2])
                     user.setDOB(temp[0][3])
+                    del_banker_views()
+                    banker_views(temp[0][4])
                     return redirect('home_banker')
 
     return redirect('/')
@@ -111,7 +113,11 @@ def home_banker(request) :
 def sign_out(request):
     user.setUserID('')
     user.setPassword('')
+    user.setDOB('')
+    user.setUserAddress('')
+    user.setUserName('')
     del_cust_views()
+    del_banker_views()
     return redirect('/')
 
 def make_account(request):
@@ -378,7 +384,29 @@ def document_profile(request ,customerID):
             'doc':doc
         }
     return render(request, 'banker/verify_document_profile.html',context)
-        
+
+def view_active_loans(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select customerID, customerName, loanID, amount, dueDate, rate, loanType from customer inner join borrows on customer.customerID = borrows.customerID inner join loans on borrows.loanID = loans.loanID"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            temp.append(x[3])
+            temp.append(x[4])
+            temp.append(x[5])
+            temp.append(x[6])
+            arr.append(temp)
+        context = {
+            'loan_list':arr
+        }
+    return render(request, 'banker/view_active_loans.html',context)
+
         
 
 
