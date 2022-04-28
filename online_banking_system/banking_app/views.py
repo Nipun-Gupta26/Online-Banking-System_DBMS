@@ -6,7 +6,6 @@ from unittest import result
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
-from pandas import array
 from banking_app.utils import *
 from django.contrib import messages
 
@@ -136,9 +135,9 @@ def make_account(request):
                 cursor.execute(query3)
                 branchQ = cursor.fetchall()
                 branchID = branchQ[randint(0, len(branchQ) - 1)][0]
-                query4 = "insert into account values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
-                query5 = "insert into hasAccount values ({}, {})".format(result[0][0], acc_num)
+                query4 = "insert into accounts values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
                 cursor.execute(query4)
+                query5 = "insert into hasAccount values ({}, {})".format(result[0][0], acc_num)
                 cursor.execute(query5)
             else:
                 messages.error(request, 'You have not verified your account yet')
@@ -225,7 +224,7 @@ def apply_loan(request):
             query1 = "select max(loanID) from loan"
             cursor.execute(query1)        
             loanID = cursor.fetchall()[0][0] + 1
-            query1 = "insert into loan(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({},{},'{}',{},'{}','{}',{})".format(loanID, amount,date_db,interestRate, mortgage, loanType, False)
+            query1 = "insert into loans(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({},{},'{}',{},'{}','{}',{})".format(loanID, amount,date_db,interestRate, mortgage, loanType, False)
             cursor.execute(query1)
            
             query2 = "insert into borrows() values ({}, {}, {})".format(loanID, 69, customerID)
