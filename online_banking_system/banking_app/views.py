@@ -313,5 +313,10 @@ def submit_documents(request):
             cursor.execute(query2)
             cursor.execute(query3)
             cursor.execute(query4)
+            query5 = "select max(verificationID) from verification"
+            cursor.execute(query5)
+            verificationID = cursor.fetchall()[0][0] + 1
+            query6 = "insert into verification values ({}, {}, {})".format(verificationID, customerID, 0)
+            cursor.execute(query6)
         return redirect('/home_customer')
     return render(request, 'customer/submit_documents.html')
