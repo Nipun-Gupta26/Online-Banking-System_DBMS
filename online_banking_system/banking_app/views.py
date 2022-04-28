@@ -408,7 +408,26 @@ def view_active_loans(request):
     return render(request, 'banker/view_active_loans.html',context)
 
         
-
+def view_accounts(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select customerID, customerName, accountID, accountType, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accountID = accounts.accountID"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            temp.append(x[3])
+            temp.append(x[4])
+            arr.append(temp)
+            context = { 
+                'account_list':arr
+            }
+    return render(request, 'banker/view_accounts.html',context)
+        
 
 
 
