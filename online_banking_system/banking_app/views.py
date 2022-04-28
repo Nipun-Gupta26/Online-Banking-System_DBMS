@@ -3,8 +3,6 @@ from random import randint
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
-from matplotlib.pyplot import connect
-from pandas import array
 from banking_app.utils import *
 
 
@@ -137,9 +135,9 @@ def make_account(request):
                 cursor.execute(query3)
                 branchQ = cursor.fetchall()
                 branchID = branchQ[randint(0, len(branchQ) - 1)][0]
-                query4 = "insert into account values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
-                query5 = "insert into hasAccount values ({}, {})".format(result[0][0], acc_num)
+                query4 = "insert into accounts values ({}, {}, '{}', {})".format(acc_num, bal, accType, branchID)
                 cursor.execute(query4)
+                query5 = "insert into hasAccount values ({}, {})".format(result[0][0], acc_num)
                 cursor.execute(query5)
             else:
                 return redirect('/home_customer')
@@ -233,7 +231,7 @@ def apply_loan(request):
             
             
             loanID = cursor.fetchall()[0][0] + 1
-            query1 = "insert into loan(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({},{},'{}',{},'{}','{}',{})".format(loanID, amount,date_db,interestRate, mortgage, loanType, False)
+            query1 = "insert into loans(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({},{},'{}',{},'{}','{}',{})".format(loanID, amount,date_db,interestRate, mortgage, loanType, False)
             cursor.execute(query1)
            
             query2 = "insert into borrows() values ({}, {}, {})".format(loanID, 69, customerID)
@@ -258,16 +256,10 @@ def make_transaction(request):
                     query3 = "update accounts set balance = {} where accNumber = {}".format(balance + amount, accDebited)
                     cursor.execute(query2)
                     cursor.execute(query3)
-                    query4 = "select max(transactionID) from transactions"
+                    query4 = "select max(transactionID) from transaction"
                     cursor.execute(query4)
                     transactionID = cursor.fetchall()[0][0] + 1
-                    query5 = "select customerID from hasAccount where accNumber = {}".format(accDebited)
-                    cursor.execute(query5)
-                    cusDeb = cursor.fetchall()[0][0]
-                    query6 = "select customerID from hasAccount where accNumber = {}".format(accCredited)
-                    cursor.execute(query6)
-                    cusCred = cursor.fetchall()[0][0]
-                    query7 = "insert into transactions values ({}, {}, {}, {}, {}, {})".format(transactionID, cusCred, accCredited,accDebited, cusDeb, amount)
+                    query7 = "insert into transactions values ({}, {}, {}, {})".format(transactionID, accCredited,accDebited, amount)
                     cursor.execute(query7)
                 else:
                     return redirect('/home_customer')
