@@ -188,12 +188,12 @@ def check_loan_profile(request,loanID) :
     return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
 
 def approve(request,loanID):
-    print(loanID)
-    with connection.cursor() as cursor :
-        print("check")
-        query = 'update loan set isVerified={} where loanID = {}'.format(1,loanID)
-        cursor.execute(query)
-        result = cursor.fetchall()
+    if request.method == "POST" : 
+        with connection.cursor() as cursor :
+            print("check")
+            query = 'update loan set isVerified={} where loanID = {}'.format(1,loanID)
+            cursor.execute(query)
+            result = cursor.fetchall()
     
     return redirect('/home_banker')
 
