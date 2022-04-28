@@ -28,11 +28,11 @@
                       Accounts
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=1%}">Verify Pan</a></li>
-                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="{%url 'verify_documents'%}">Verify Documents</a></li>
+                      {% comment %} <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=2%}">Verify Passport</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=3%}">Verify Aadhar</a></li>
+                      <li><a class="dropdown-item" href="{%url 'verify_documents' verbose=3%}">Verify Aadhar</a></li> {% endcomment %}
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="/view_accounts">View Accounts</a></li>
                       

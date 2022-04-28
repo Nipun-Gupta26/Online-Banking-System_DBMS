@@ -260,12 +260,6 @@ def make_transaction(request):
                     query4 = "select max(transactionID) from transaction"
                     cursor.execute(query4)
                     transactionID = cursor.fetchall()[0][0] + 1
-                    # query5 = "select customerID from hasAccount where accNumber = {}".format(accDebited)
-                    # cursor.execute(query5)
-                    # cusDeb = cursor.fetchall()[0][0]
-                    # query6 = "select customerID from hasAccount where accNumber = {}".format(accCredited)
-                    # cursor.execute(query6)
-                    # cusCred = cursor.fetchall()[0][0]
                     query7 = "insert into transactions values ({}, {}, {}, {})".format(transactionID, accCredited,accDebited, amount)
                     cursor.execute(query7)
                 else:
@@ -356,28 +350,44 @@ def check_loan_profile(request,loanID) :
     return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
 
 
-def verify_documents(request,verbose):
+def verify_documents(request):
+    doc = dict()
     with connection.cursor() as cursor:
-        if verbose == 1:
-            docType = "Pan card"
-        elif verbose == 2:
-            docType="Passport"
-        else: 
-            docType="Aadhar card"
                     
-        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {}) and documentType='{}'".format(0,docType)
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {}) and documentType='{}'".format(0,"Aadhar card")
         cursor.execute(query1)
         result = cursor.fetchall()
-        arr = []
-        for x in result:
-            temp = []
-            temp.append(x[0])
-            temp.append(x[1])
-            temp.append(x[2])
-            arr.append(temp)
         
+        for i in result: 
+            if i[0] in doc.keys():
+                doc[i[0]].append(i[2])
+            else:   
+                doc[i[0]] = [i[2]]
+                
+       
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {}) and documentType='{}'".format(0,"Pan card")
+        cursor.execute(query1)
+        result = cursor.fetchall()
+   
+        for i in result: 
+            if i[0] in doc.keys():
+                doc[i[0]].append(i[2])
+            else:   
+                doc[i[0]] = [i[2]]
+        
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {}) and documentType='{}'".format(0,"Passport")
+        cursor.execute(query1)
+        result = cursor.fetchall()
+      
+        for i in result: 
+            if i[0] in doc.keys():
+                doc[i[0]].append(i[2])
+            else:   
+                doc[i[0]] = [i[2]]
+        
+        print(doc)
         context = {
-            'doc_list': arr,
+            'doc':doc,
             'user':user,
         }
     return render(request, 'banker/verify_documents.html',context)
