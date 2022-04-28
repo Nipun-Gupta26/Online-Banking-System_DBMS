@@ -141,40 +141,61 @@ def make_account(request):
 
 def approveLoans(request) : 
     
-    
-    if request.method == "POST" : 
-        
-        with connection.cursor() as cursor : 
-        
-                query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
-                cursor.execute(query)
-                result = cursor.fetchall()
-                
-                
-                arr = []
-                
-                for i in range(len(result)):
-                    temp = []
-                    
-                    temp.append(result[i][0])
-                    temp.append(result[i][1])
-                    temp.append(result[i][2])
-                    temp.append(result[i][3])
-                    temp.append(result[i][4])
-                    temp.append(result[i][5])
-                    
-                    arr.append(temp)
-                    
+    with connection.cursor() as cursor : 
+      
+            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
+            cursor.execute(query)
+            result = cursor.fetchall()
             
+            
+            arr = []
+            
+            for i in range(len(result)):
+                temp = []
                 
-                context = {
-                    'loan_list': arr,
-                    'user':user
-                }
+                temp.append(result[i][0])
+                temp.append(result[i][1])
+                temp.append(result[i][2])
+                temp.append(result[i][3])
+                temp.append(result[i][4])
+                temp.append(result[i][5])
+                
+                arr.append(temp)
+                
+        
+            
+            context = {
+                'loan_list': arr,
+                'user':user
+            }
 
     return render(request, 'banker/approve_loans.html',context)
 
+def check_loan_profile(request,loanID) : 
+    
+    with connection.cursor() as cursor :
+        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        
+        loan = []
+        loan.append(result[0][0])
+        loan.append(result[0][1])
+        loan.append(result[0][2])
+        loan.append(result[0][3])
+        loan.append(result[0][4])
+        
+    return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
 
+def approve(request,loanID):
+    print(loanID)
+    with connection.cursor() as cursor :
+        print("check")
+        query = 'update loan set isVerified={} where loanID = {}'.format(1,loanID)
+        cursor.execute(query)
+        result = cursor.fetchall()
+    
+    return redirect('/home_banker')
 
 def generate_passbook(request):
     
