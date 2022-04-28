@@ -1,10 +1,26 @@
 {%extends 'banker/base_banker.html'%}
-
+{%block content%}
+{{user.userName}}
+{%endblock%}
 {%block body%}
-<p color="white">Approve Loans</p>
-{% comment %} <form action={% url 'check_credit_score'%} method="post">
-    {%csrf_token%}
-    <input type="text" name="cid" id="intInput"></input>
-    <button class="btn btn-lg btn-primary mt-5" type="submit">Check</button>
-</form> {% endcomment %}
+<h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Approve Loans</h1>
+<div style="display:flex; flex-direction:row; flex-wrap:wrap; margin-left:7%;">
+{%for loan in loan_list%}
+
+    <div class="card" style="min-width: 15rem; background-color:black; border-color:white; margin-left:5%; margin-top:5%;">
+        <div class="card-body">
+          <h5 class="card-title" style="color:white;">LoanID : {{loan.0}}</h5>
+          <hr style="border: 1px solid white;">
+          <p class="card-text" style="color:white;">Amount : {{loan.1}}</p>
+          <p class="card-text" style="color:white;">Date : {{loan.2}}</p>
+          <p class="card-text" style="color:white;">Rate : {{loan.3}}</p>
+          <p class="card-text" style="color:white;">LoanType : {{loan.4}}</p>
+          <p class="card-text" style="color:white;">Mortgage : {{loan.5}}</p>
+          <hr>
+          <a href="{% url 'check_loan_profile' loanID=loan.0 %}" class="btn btn-primary" >Check</a>
+        </div>
+    </div>
+
+{%endfor%}
+</div>
 {%endblock%}

@@ -1,9 +1,11 @@
-from datetime import *
+from datetime import date
 from random import randint
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
+from pandas import array
 from banking_app.utils import *
+
 
 
 ##classes 
@@ -138,21 +140,46 @@ def make_account(request):
     return render(request, 'customer/makeAccount.html')
 
 def approveLoans(request) : 
-    if request.method == "POST" :
-        
-        with connection.cursor() as cursor : 
-            
+    
+    with connection.cursor() as cursor : 
+      
             query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
             cursor.execute(query)
             result = cursor.fetchall()
             
-            print(result)
+            
+            arr = []
+            
+            for i in range(len(result)):
+                temp = []
+                
+                temp.append(result[i][0])
+                temp.append(result[i][1])
+                temp.append(result[i][2])
+                temp.append(result[i][3])
+                temp.append(result[i][4])
+                temp.append(result[i][5])
+                
+                arr.append(temp)
+                
+        
+            
+            context = {
+                'loan_list': arr,
+                'user':user
+            }
 
-    return render(request, 'banker/approve_loans.html')
+    return render(request, 'banker/approve_loans.html',context)
 
 def generate_passbook(request):
     
-    context = {}
+    context = {
+        'userID': user.userID,
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
+    }
     
     with connection.cursor() as cursor:
         query1 = "select customerID from user where userID = {}".format(user.userID)
@@ -176,7 +203,15 @@ def generate_passbook(request):
     return render(request, 'passbook.html', context)
 
 def active_loans(request):
-    context = {}
+    
+    context = {
+        'userID': user.userID,
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
+    }
+    
     with connection.cursor() as cursor:
         query1 = "select amount, dueDate, rate, mortagage, loanType from loans"
         cursor.execute(query1)
@@ -187,23 +222,45 @@ def active_loans(request):
     return render(request, 'customer/activeLoans.html', context)
 
 def apply_loan(request):
+    
+    context = {
+        'userID': user.userID,
+        'password': user.password,
+        'userName': user.userName,
+        'DOB': user.DOB,
+        'userAddress': user.userAddress
+    }
+    
     if request.method == 'POST':
         with connection.cursor() as cursor:
+            
             temp = "select customerID from customer where userID = {}".format(user.userID)
             cursor.execute(temp)
             customerID = cursor.fetchall()[0][0]
             amount = request.POST.get('amount', False)
-            mortagage = request.POST.get('mortagage', False)
+            mortgage = request.POST.get('mortgage', False)
             loanType = request.POST.get('loanType', False)
+            interestRate = 7
+            
+            date_db = date.today()
+            
             query1 = "select max(loanID) from loan"
             cursor.execute(query1)
+            
+            print(mortgage)
+            print(loanType)
+            print(amount)
+            
+            
             loanID = cursor.fetchall()[0][0] + 1
-            query1 = "insert into loan(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({}, {}, {}, {}, {}, {}, {})".format(loanID, amount, datetime.date(), 7, mortagage, loanType, 1)
+            query1 = "insert into loan(loanID,amount,dueDate,rate,mortgage,loanType,isVerified) values ({},{},'{}',{},'{}','{}',{})".format(loanID, amount,date_db,interestRate, mortgage, loanType, False)
             cursor.execute(query1)
-            query2 = "insert into borrows(loanID,branchID,customerID) values ({}, {}, {})".format(loanID, 69, customerID)
+           
+            query2 = "insert into borrows() values ({}, {}, {})".format(loanID, 69, customerID)
             cursor.execute(query2)
+        
         return redirect('/home_customer')
-    return render(request, 'customer/apply_loan.html')
+    return render(request, 'customer/apply_loan.html',context)
 
 def make_transaction(request):
     if request.method == 'POST':

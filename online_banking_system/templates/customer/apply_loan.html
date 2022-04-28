@@ -1,19 +1,30 @@
 {%extends 'customer/base_customer.html'%}
+
+{%block content%}
+{{userName}}
+{%endblock%}
 {%block body%}
     <form method="POST" action={%url 'apply_loan'%}>
         {%csrf_token%}
-        <div>
-            <label for="amountID">Amount</label>
-            <input type="text" name="amount" id="amountID"></input>
+        <h1 style="text-align:center; color:white; font-size:30px; margin-top : 3%;">Loan Application</h1>
+
+        <div class="form-floating mt-5" style="margin-left:32%;">
+        <p style="color:white;">Amount</p>
+        <input class="form-control" id="amountID" type = "text" placeholder="Amount" name = "amount" style="width:50%;">
         </div>
-        <div>
-            <label for="mortgageID">Mortgage</label>
-            <input type="text" name="mortgage" id="mortgageID"></input>
+        <br>
+        <div class="form-floating" style="margin-left:32%;">
+        <p style="color:white;">Loan Type</p>
+        <input type="text" class="form-control" id="loanTypeID" placeholder="Loan Type" name = "loanType" style="align:center; width:50%;">
+        
         </div>
-        <div>
-            <label for="loanTypeID">Loan Type</label>
-            <input type="text" name="loanType" id="loanTypeID"></input>
+        <br>
+        <div class="form-floating" style="margin-left:32%;">
+            <p style="color:white;">Mortgage</p>
+            <input type="text" class="form-control" id="mortgageID" placeholder="Mortgage" name = "mortgage" style="align:center; width:50%;">
+            
         </div>
+
         <button class="btn btn-lg btn-primary mt-5"style="margin-left:32%; width:34.3%;" type="submit">Apply</button>
     </form>
 {%endblock%}
