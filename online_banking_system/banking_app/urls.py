@@ -19,4 +19,7 @@ urlpatterns = [
     path('approve/<int:loanID>', views.approve, name='approve'),
     path('submit_documents', views.submit_documents, name='submit_documents'),
     path('make_transfer', views.make_transfer, name='make_transfer'),
+    path('verify_documents', views.verify_documents, name='verify_documents'),
+    path('view_active_loans', views.view_active_loans, name='view_active_loans'),
+    path('view_accounts', views.view_accounts, name='view_accounts'),
 ]

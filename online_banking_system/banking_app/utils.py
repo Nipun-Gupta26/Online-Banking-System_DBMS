@@ -18,4 +18,20 @@ def del_cust_views():
         cursor.execute(query1)
         cursor.execute(query2)
         cursor.execute(query3)
-    return 
+    return
+
+def banker_views(branchID):
+    with connection.cursor() as cursor:
+        query1 = "create view accounts as select * from account where brachID = {}".format(branchID)
+        query2 = "create view loans as select * from loans where isVerified = {} and branchID in (select branchID from borrows where branchID = {})".format(1, branchID)
+        cursor.execute(query1)
+        cursor.execute(query2)
+    return
+
+def del_banker_views():
+    with connection.cursor() as cursor:
+        query1 = "drop view if exists accounts"
+        query2 = "drop view if exists loans"
+        cursor.execute(query1)
+        cursor.execute(query2)
+    return

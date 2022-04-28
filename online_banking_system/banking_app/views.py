@@ -69,7 +69,7 @@ def loginrequest(request):
                     cust_views(temp[0][0])
                     return redirect('home_customer')
 
-                query3 = 'select empID,empName,empAddress,DOB from banker where userID = {}'.format(userID)
+                query3 = 'select empID,empName,empAddress,DOB, branchID from banker where userID = {}'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
                 
@@ -80,6 +80,8 @@ def loginrequest(request):
                     user.setUserName(temp[0][1])
                     user.setUserAddress(temp[0][2])
                     user.setDOB(temp[0][3])
+                    del_banker_views()
+                    banker_views(temp[0][4])
                     return redirect('home_banker')
 
     return redirect('/')
@@ -110,7 +112,11 @@ def home_banker(request) :
 def sign_out(request):
     user.setUserID('')
     user.setPassword('')
+    user.setDOB('')
+    user.setUserAddress('')
+    user.setUserName('')
     del_cust_views()
+    del_banker_views()
     return redirect('/')
 
 def make_account(request):
@@ -138,64 +144,6 @@ def make_account(request):
                 return redirect('/home_customer')
         return redirect('/home_customer')
     return render(request, 'customer/makeAccount.html')
-
-def approveLoans(request) : 
-    
-    with connection.cursor() as cursor : 
-      
-            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
-            cursor.execute(query)
-            result = cursor.fetchall()
-            
-            
-            arr = []
-            
-            for i in range(len(result)):
-                temp = []
-                
-                temp.append(result[i][0])
-                temp.append(result[i][1])
-                temp.append(result[i][2])
-                temp.append(result[i][3])
-                temp.append(result[i][4])
-                temp.append(result[i][5])
-                
-                arr.append(temp)
-                
-        
-            
-            context = {
-                'loan_list': arr,
-                'user':user
-            }
-
-    return render(request, 'banker/approve_loans.html',context)
-
-def check_loan_profile(request,loanID) : 
-    
-    with connection.cursor() as cursor :
-        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
-        cursor.execute(query)
-        result = cursor.fetchall()
-        
-        loan = []
-        loan.append(result[0][0])
-        loan.append(result[0][1])
-        loan.append(result[0][2])
-        loan.append(result[0][3])
-        loan.append(result[0][4])
-        
-    return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
-
-def approve(request,loanID):
-    if request.method == "POST" : 
-        with connection.cursor() as cursor :
-            print("check")
-            query = 'update loan set isVerified={} where loanID = {}'.format(1,loanID)
-            cursor.execute(query)
-            result = cursor.fetchall()
-    
-    return redirect('/home_banker')
 
 def generate_passbook(request):
     
@@ -347,6 +295,137 @@ def submit_documents(request):
 
 
 #banker functions
+def approveLoans(request) : 
+    
+    with connection.cursor() as cursor : 
+      
+            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            arr = []
+            
+            for i in range(len(result)):
+                temp = []
+                temp.append(result[i][0])
+                temp.append(result[i][1])
+                temp.append(result[i][2])
+                temp.append(result[i][3])
+                temp.append(result[i][4])
+                temp.append(result[i][5])
+                
+                arr.append(temp)
+
+            context = {
+                'loan_list': arr,
+                'user':user
+            }
+
+    return render(request, 'banker/approve_loans.html',context)
+
+def check_loan_profile(request,loanID) : 
+    
+    with connection.cursor() as cursor :
+        if request.method == 'POST':
+            query = 'update loan set isVerified = {} where loanID = {}'.format(1,loanID)
+            cursor.execute(query)
+            return redirect('/home_banker')
+        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        
+        loan = []
+        loan.append(result[0][0])
+        loan.append(result[0][1])
+        loan.append(result[0][2])
+        loan.append(result[0][3])
+        loan.append(result[0][4])
+        
+    return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
+
+
+def verify_documents(request):
+    with connection.cursor() as cursor:
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {})".format(0)
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            arr.append(temp)
+        
+        context = {
+            'doc_list': arr,
+            'user':user
+        }
+    return render(request, 'banker/verify_documents.html',context)
+
+def document_profile(request ,customerID):
+    context = {}
+    with connection.cursor() as cursor:
+        if request.method == 'POST':
+            query1 = "update verifies set isVerified = {} where customerID = {}".format(1, customerID)
+            cursor.execute(query1)
+            return redirect('/home_banker')
+        query2 = "select customerID, customerName, customerAddress, DOB, documentType, documentFile from customer inner join documents on customer.customerID = documents.customerID where customer.customerID = {}".format(customerID)
+        cursor.execute(query2)
+        result = cursor.fetchall()
+        doc = []
+        for x in result[0]:
+            doc.append(x)
+        context = {
+            'userName':user.userName,
+            'doc':doc
+        }
+    return render(request, 'banker/verify_document_profile.html',context)
+
+def view_active_loans(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select customerID, customerName, loanID, amount, dueDate, rate, loanType from customer inner join borrows on customer.customerID = borrows.customerID inner join loans on borrows.loanID = loans.loanID"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            temp.append(x[3])
+            temp.append(x[4])
+            temp.append(x[5])
+            temp.append(x[6])
+            arr.append(temp)
+        context = {
+            'loan_list':arr
+        }
+    return render(request, 'banker/view_active_loans.html',context)
+
+        
+def view_accounts(request):
+    context = {}
+    with connection.cursor() as cursor:
+        query1 = "select customerID, customerName, accountID, accountType, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accountID = accounts.accountID"
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            temp.append(x[3])
+            temp.append(x[4])
+            arr.append(temp)
+            context = { 
+                'account_list':arr
+            }
+    return render(request, 'banker/view_accounts.html',context)
+        
+
 
 
     
