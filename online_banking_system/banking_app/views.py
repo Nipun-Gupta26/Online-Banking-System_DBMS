@@ -141,35 +141,40 @@ def make_account(request):
 
 def approveLoans(request) : 
     
-    with connection.cursor() as cursor : 
-      
-            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
-            cursor.execute(query)
-            result = cursor.fetchall()
-            
-            
-            arr = []
-            
-            for i in range(len(result)):
-                temp = []
-                
-                temp.append(result[i][0])
-                temp.append(result[i][1])
-                temp.append(result[i][2])
-                temp.append(result[i][3])
-                temp.append(result[i][4])
-                temp.append(result[i][5])
-                
-                arr.append(temp)
-                
+    
+    if request.method == "POST" : 
         
+        with connection.cursor() as cursor : 
+        
+                query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
+                cursor.execute(query)
+                result = cursor.fetchall()
+                
+                
+                arr = []
+                
+                for i in range(len(result)):
+                    temp = []
+                    
+                    temp.append(result[i][0])
+                    temp.append(result[i][1])
+                    temp.append(result[i][2])
+                    temp.append(result[i][3])
+                    temp.append(result[i][4])
+                    temp.append(result[i][5])
+                    
+                    arr.append(temp)
+                    
             
-            context = {
-                'loan_list': arr,
-                'user':user
-            }
+                
+                context = {
+                    'loan_list': arr,
+                    'user':user
+                }
 
     return render(request, 'banker/approve_loans.html',context)
+
+
 
 def generate_passbook(request):
     
