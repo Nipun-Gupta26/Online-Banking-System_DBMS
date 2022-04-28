@@ -4,12 +4,12 @@
 {%endblock%}
 
 {%block body%}
-<form method="POST" action={%url 'approve' loanID=loan.0%}>
-    {%csrf_token%}
-<p style="color:white;">Customer ID : {{loan.0}}</p>
-<p style="color:white;">Customer Name : {{loan.1}}</p>
-<p style="color:white;">Customer Address : {{loan.2}}</p>
-<p style="color:white;">DOB : {{loan.3}}</p>
-<button href="{%url 'approve' loanID=loan.0%}" class="btn btn-primary">Approve</a>
+<form method="POST">
+{%csrf_token%}
+    <p style="color:white;">Customer ID : {{loan.0}}</p>
+    <p style="color:white;">Customer Name : {{loan.1}}</p>
+    <p style="color:white;">Customer Address : {{loan.2}}</p>
+    <p style="color:white;">DOB : {{loan.3}}</p>
+    <button class="btn btn-primary">Approve</buttom>
 </form>
 {%endblock%}

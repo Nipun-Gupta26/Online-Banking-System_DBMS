@@ -3,6 +3,7 @@ from random import randint
 from django.shortcuts import render
 from django.db import connection
 from django.shortcuts import redirect
+from matplotlib.pyplot import connect
 from pandas import array
 from banking_app.utils import *
 
@@ -139,64 +140,6 @@ def make_account(request):
         return redirect('/home_customer')
     return render(request, 'customer/makeAccount.html')
 
-def approveLoans(request) : 
-    
-    with connection.cursor() as cursor : 
-      
-            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
-            cursor.execute(query)
-            result = cursor.fetchall()
-            
-            
-            arr = []
-            
-            for i in range(len(result)):
-                temp = []
-                
-                temp.append(result[i][0])
-                temp.append(result[i][1])
-                temp.append(result[i][2])
-                temp.append(result[i][3])
-                temp.append(result[i][4])
-                temp.append(result[i][5])
-                
-                arr.append(temp)
-                
-        
-            
-            context = {
-                'loan_list': arr,
-                'user':user
-            }
-
-    return render(request, 'banker/approve_loans.html',context)
-
-def check_loan_profile(request,loanID) : 
-    
-    with connection.cursor() as cursor :
-        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
-        cursor.execute(query)
-        result = cursor.fetchall()
-        
-        loan = []
-        loan.append(result[0][0])
-        loan.append(result[0][1])
-        loan.append(result[0][2])
-        loan.append(result[0][3])
-        loan.append(result[0][4])
-        
-    return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
-
-def approve(request,loanID):
-    if request.method == "POST" : 
-        with connection.cursor() as cursor :
-            print("check")
-            query = 'update loan set isVerified={} where loanID = {}'.format(1,loanID)
-            cursor.execute(query)
-            result = cursor.fetchall()
-    
-    return redirect('/home_banker')
-
 def generate_passbook(request):
     
     context = {
@@ -208,7 +151,7 @@ def generate_passbook(request):
     }
     
     with connection.cursor() as cursor:
-        query1 = "select customerID from user where userID = {}".format(user.userID)
+        query1 = "select customerID from customer where userID = {}".format(user.userID)
         cursor.execute(query1)
         cid = cursor.fetchall()[0][0]
         query2 = "select * from transactions where customerCredited = {} and customerDebited != {}".format(cid, cid)
@@ -344,6 +287,96 @@ def submit_documents(request):
 
 
 #banker functions
+def approveLoans(request) : 
+    
+    with connection.cursor() as cursor : 
+      
+            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loan where isVerified = {}'.format(0)
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            arr = []
+            
+            for i in range(len(result)):
+                temp = []
+                temp.append(result[i][0])
+                temp.append(result[i][1])
+                temp.append(result[i][2])
+                temp.append(result[i][3])
+                temp.append(result[i][4])
+                temp.append(result[i][5])
+                
+                arr.append(temp)
+
+            context = {
+                'loan_list': arr,
+                'user':user
+            }
+
+    return render(request, 'banker/approve_loans.html',context)
+
+def check_loan_profile(request,loanID) : 
+    
+    with connection.cursor() as cursor :
+        if request.method == 'POST':
+            query = 'update loan set isVerified = {} where loanID = {}'.format(1,loanID)
+            cursor.execute(query)
+            return redirect('/home_banker')
+        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        
+        loan = []
+        loan.append(result[0][0])
+        loan.append(result[0][1])
+        loan.append(result[0][2])
+        loan.append(result[0][3])
+        loan.append(result[0][4])
+        
+    return render(request, 'banker/check_profile_loan_approval.html',{'userName':user.userName,'loan':loan})
+
+
+def verify_documents(request):
+    with connection.cursor() as cursor:
+        query1 = "select customerID, documentType, documentFile from documents where customerID in (select customerID from verifies where isVerified = {})".format(0)
+        cursor.execute(query1)
+        result = cursor.fetchall()
+        arr = []
+        for x in result:
+            temp = []
+            temp.append(x[0])
+            temp.append(x[1])
+            temp.append(x[2])
+            arr.append(temp)
+        
+        context = {
+            'doc_list': arr,
+            'user':user
+        }
+    return render(request, 'banker/verify_documents.html',context)
+
+def document_profile(request ,customerID):
+    context = {}
+    with connection.cursor() as cursor:
+        if request.method == 'POST':
+            query1 = "update verifies set isVerified = {} where customerID = {}".format(1, customerID)
+            cursor.execute(query1)
+            return redirect('/home_banker')
+        query2 = "select customerID, customerName, customerAddress, DOB, documentType, documentFile from customer inner join documents on customer.customerID = documents.customerID where customer.customerID = {}".format(customerID)
+        cursor.execute(query2)
+        result = cursor.fetchall()
+        doc = []
+        for x in result[0]:
+            doc.append(x)
+        context = {
+            'userName':user.userName,
+            'doc':doc
+        }
+    return render(request, 'banker/verify_document_profile.html',context)
+        
+        
+
+
 
 
     
