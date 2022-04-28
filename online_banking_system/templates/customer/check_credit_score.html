@@ -1,0 +1,13 @@
+{%extends 'customer/base_customer.html'%}
+{% load mathfilters %}
+{%block content%}
+{{user.userName}}
+{%endblock%}
+{%block body%}
+<p style="color:white; font-size:25px; text-align:center; margin-top:5%;">Credit Score</p>
+<p style="color:yellow; text-align:center;margin-top:3%; font-size:22px;">{{creditScore}}</p>
+<div class="progress w-50 " style="margin-left:25%; margin-top:2%;">
+    <div class="progress-bar progress-bar-striped progress-bar-animated"  role="progressbar" aria-valuenow="{{creditScore}}" aria-valuemin="0" aria-valuemax="100" style="width: {{ creditScore|mul:10 }}%"></div>
+</div>
+
+{%endblock%}    

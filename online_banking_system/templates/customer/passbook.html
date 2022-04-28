@@ -1,0 +1,64 @@
+{%extends 'customer/base_customer.html'%}
+
+{%block content%}
+{{user.userName}}
+{%endblock%}
+
+{%block body%}
+<div>
+    <p style="color:white; text-align:center; font-size:30px; margin-top:2%;">Debit Transaction <img src="static/down.png" width="40px" height="40px"/></p>
+    
+        <div class="card p-2" style="border:none; background-color:black; min-width:13rem; width:100%; margin-left:5%;">
+            <table style="color:white; border:none;">
+                <th>Transaction ID</th>
+                <th>Account Credited</th>
+                <th>Account Debited</th>
+                <th>Amount</th>
+                <th>Mode Of Transfer</th>
+                
+                {%for i in credit%}
+                <tr>
+                <td>{{i.0}}</td>
+                <td>{{i.1}}</td>
+                <td>{{i.2}}</td>
+                <td>{{i.3}}</td>
+                {%if i.1 != i.2%}
+                <td style="color:yellow;">Direct Transfer</td>
+                {%else%}
+                <td style="color:green;">Deposit</td>
+                {%endif%}
+                </tr> 
+                {%endfor%}
+            </table>
+        </div>
+            
+</div>
+<div>
+    <p style="color:white; text-align:center; font-size:30px; margin-top:2%;">Credit Transaction <img src="static/up.png" width="50px" height="50px"/></p>
+    
+        <div class="card p-2" style="border:none; background-color:black; min-width:13rem; width:100%; margin-left:5%;">
+            <table style="color:white; border:none;">
+                <th>Transaction ID</th>
+                <th>Account Credited</th>
+                <th>Account Debited</th>
+                <th>Amount</th>
+                <th>Mode Of Transfer</th>
+                
+                {%for i in debit%}
+                <tr>
+                <td>{{i.0}}</td>
+                <td>{{i.1}}</td>
+                <td>{{i.2}}</td>
+                <td>{{i.3}}</td>
+                {%if i.1 != i.2%}
+                <td style="color:orange;">Direct Transfer</td>
+                {%else%}
+                <td style="color:red;">Deposit</td>
+                {%endif%}
+                </tr> 
+                {%endfor%}
+            </table>
+        </div>
+            
+</div>
+{%endblock%}

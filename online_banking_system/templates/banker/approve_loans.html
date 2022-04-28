@@ -4,10 +4,11 @@
 {%endblock%}
 {%block body%}
 <h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Approve Loans</h1>
+<p style="color:yellow; margin-left:12%; margin-top:1%;">*Loans with customers having a credit score of more than 5.0 will be approved.</p>
 <div style="display:flex; flex-direction:row; flex-wrap:wrap; margin-left:7%;">
 {%for loan in loan_list%}
 
-    <div class="card" style="min-width: 15rem; background-color:black; border-color:white; margin-left:5%; margin-top:5%;">
+    <div class="card" style="min-width: 15rem; background-color:black; border-color:white; margin-left:5%; margin-top:3%;">
         <div class="card-body">
           <h5 class="card-title" style="color:white;">LoanID : {{loan.0}}</h5>
           <hr style="border: 1px solid white;">

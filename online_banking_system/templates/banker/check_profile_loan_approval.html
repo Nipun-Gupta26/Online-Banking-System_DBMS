@@ -4,12 +4,15 @@
 {%endblock%}
 
 {%block body%}
+<div style="margin-left:40%; margin-top:5%;">
 <form method="POST">
 {%csrf_token%}
-    <p style="color:white;">Customer ID : {{loan.0}}</p>
-    <p style="color:white;">Customer Name : {{loan.1}}</p>
-    <p style="color:white;">Customer Address : {{loan.2}}</p>
-    <p style="color:white;">DOB : {{loan.3}}</p>
-    <button class="btn btn-primary">Approve</buttom>
+    <p style="color:white; font-size:23px;">Customer ID : {{loan.0}}</p>
+    <p style="color:white; font-size:23px;">Customer Name : {{loan.1}}</p>
+    <p style="color:white; font-size:23px;">Customer Address : {{loan.2}}</p>
+    <p style="color:white; font-size:23px;">DOB : {{loan.3}}</p>
+    <br>
+    <button class="btn btn-primary" style="width:31%;">Approve</buttom>
 </form>
+</div>
 {%endblock%}

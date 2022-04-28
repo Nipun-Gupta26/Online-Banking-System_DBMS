@@ -1,0 +1,23 @@
+{%extends 'banker/base_banker.html'%}
+{%block content%}
+{{user.userName}}
+{%endblock%}
+{%block body%}
+<h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Verify Documents</h1>
+<div style="display:flex; flex-direction:row; flex-wrap:wrap; margin-left:7%;">
+{%for doc in doc_list%}
+
+    <div class="card" style="min-width: 15rem; background-color:black; border-color:white; margin-left:5%; margin-top:5%;">
+        <div class="card-body">
+          <h5 class="card-title" style="color:white;">Customer ID : {{doc.0}}</h5>
+          <hr style="border: 1px solid white;">
+          <p class="card-text" style="color:white;">Document Type : {{doc.1}}</p>
+          <p class="card-text" style="color:white;">Document File : {{doc.2}}</p>
+          <hr>
+          <a href="{% url 'document_profile' customerID=doc.0 %}" class="btn btn-primary" >Verify</a>
+        </div>
+    </div>
+
+{%endfor%}
+</div>
+{%endblock%}
