@@ -270,4 +270,43 @@ def make_transaction(request):
             amount = request.POST.get('amount', False)
             password = request.POST.get('password', False)
             if password == user.password:
-                query1 = ""
+                query1 = "select balance from accounts where accNumber = {}".format(accCredited)
+                cursor.execute(query1)
+                balance = cursor.fetchall()[0][0]
+                if balance > amount:
+                    query2 = "update accounts set balance = {} where accNumber = {}".format(balance - amount, accCredited)
+                    query3 = "update accounts set balance = {} where accNumber = {}".format(balance + amount, accDebited)
+                    cursor.execute(query2)
+                    cursor.execute(query3)
+                    query4 = "select max(transactionID) from transactions"
+                    cursor.execute(query4)
+                    transactionID = cursor.fetchall()[0][0] + 1
+                    query5 = "select customerID from hasAccount where accNumber = {}".format(accDebited)
+                    cursor.execute(query5)
+                    cusDeb = cursor.fetchall()[0][0]
+                    query6 = "select customerID from hasAccount where accNumber = {}".format(accCredited)
+                    cursor.execute(query6)
+                    cusCred = cursor.fetchall()[0][0]
+                    query7 = "insert into transactions values ({}, {}, {}, {}, {}, {})".format(transactionID, cusCred, accCredited,accDebited, cusDeb, amount)
+                    cursor.execute(query7)
+                else:
+                    return redirect('/home_customer')
+            else:
+                return redirect('/home_customer')
+        return redirect('/home_customer')
+    return render(request, 'customer/make_transaction.html')
+
+def submit_documents(request):
+    if request.method == 'POST':
+        with connection.cursor() as cursor:
+            query1 = "select customerID from customer where userID = {}".format(user.userID)
+            cursor.execute(query1)
+            customerID = cursor.fetchall()[0][0]
+            query2 = "insert into documents values ({}, {}, {})".format(customerID, "Adhaar Card", 'adhaar.jpg')
+            query3 = "insert into documents values ({}, {}, {})".format(customerID, "Pan Card", 'pan.jpg')
+            query4 = "insert into documents values ({}, {}, {})".format(customerID, "Passport", 'passport.jpg')
+            cursor.execute(query2)
+            cursor.execute(query3)
+            cursor.execute(query4)
+        return redirect('/home_customer')
+    return render(request, 'customer/submit_documents.html')
