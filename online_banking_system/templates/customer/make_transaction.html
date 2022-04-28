@@ -1,0 +1,36 @@
+{%extends 'customer/base_customer.html'%}
+{%block content%}
+{{user.userName}}
+{%endblock%}
+{%block body%}
+
+    <p style="color:white; text-align:center; font-size:30px; margin-top:2%;"><img src="static/transfer.png" width="4%" height="4%"/>Transfer Portal</p>
+    <div style="margin-left:37%;">
+    <div>
+    <form method="POST" action={%url 'make_transaction'%}>
+        {%csrf_token%}
+    <div class="form-floating">
+        <p style="color:white; margin-top:5%;">Choose Account</p>
+        <select style="width:40%;" name="accCredited">
+            {%for i in acc_num%}
+                <option>{{i.0}}</option>
+            {%endfor%}
+          </select>
+    </div>
+    <div class="form-floating">
+        <p style="color:white; margin-top:3%;">Amount</p>
+        <input type="text" class="form-control" id="floatingPassword" placeholder="Amount" name = "amount" style="width:40%; height:30px; padding:1%;">
+    </div>
+    <div class="form-floating">
+        <p style="color:white; margin-top:3%;">Transfer To</p>
+        <input type="text" class="form-control" id="floatingPassword" placeholder="Account Number" name = "accDebited" style="width:40%; height:30px; padding:1%;">
+    </div>
+    <div class="form-floating">
+        <p style="color:white; margin-top:3%;">Password</p>
+        <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name = "password" style="width:40%; height:30px; padding:1%;">
+    </div>
+    <button class="btn btn-lg btn-primary mt-5"style="width:40%;" type="submit">Transfer</button>
+</div>
+</form>
+</div>
+{%endblock%}

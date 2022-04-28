@@ -16,10 +16,11 @@ urlpatterns = [
     path('active_loans', views.active_loans, name='active_loans'),
     path('apply_loan', views.apply_loan, name='apply_loan'),
     path('check_loan_profile/<int:loanID>', views.check_loan_profile, name='check_loan_profile'),
-    path('approve/<int:loanID>', views.approve, name='approve'),
     path('submit_documents', views.submit_documents, name='submit_documents'),
-    path('make_transfer', views.make_transfer, name='make_transfer'),
+    path('make_transaction', views.make_transaction, name='make_transaction'),
     path('verify_documents', views.verify_documents, name='verify_documents'),
+    path('document_profile/<int:customerID>', views.document_profile, name='document_profile'),
     path('view_active_loans', views.view_active_loans, name='view_active_loans'),
     path('view_accounts', views.view_accounts, name='view_accounts'),
+    path('check_credit_score',views.check_credit_score,name='check_credit_score'),
 ]

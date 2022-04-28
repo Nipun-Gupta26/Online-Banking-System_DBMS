@@ -1,0 +1,25 @@
+{%extends 'banker/base_banker.html'%}
+{%block content%}
+{{user.userName}}
+{%endblock%}
+{%block body%}
+<h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Active Loans</h1>
+<div style="display:flex; flex-direction:row; flex-wrap:wrap; margin-left:7%;">
+{%for loan in loan_list%}
+
+    <div class="card" style="min-width: 15rem; background-color:black; border-color:white; margin-left:5%; margin-top:5%;">
+        <div class="card-body">
+          <h5 class="card-title" style="color:white;">LoanID : {{loan.2}}</h5>
+          <h5 class="card-title" style="color:white;">CustomerID : {{loan.0}}</h5>
+          <hr style="border: 1px solid white;">
+          <p class="card-text" style="color:white;">Amount : {{loan.3}}</p>
+          <p class="card-text" style="color:yellow;">Due Date : {{loan.4}}</p>
+          <p class="card-text" style="color:white;">Rate : {{loan.5}}</p>
+          <p class="card-text" style="color:white;">LoanType : {{loan.6}}</p>
+          
+        </div>
+    </div>
+
+{%endfor%}
+</div>
+{%endblock%}

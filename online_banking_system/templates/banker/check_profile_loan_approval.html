@@ -4,26 +4,15 @@
 {%endblock%}
 
 {%block body%}
-<<<<<<< HEAD
-<form method="POST" action={%url 'approve' loanID=loan.0%}>
-    {%csrf_token%}
-<div style="margin-left:40%; margin-top:10%; border-color:white;">
-<p style="color:white; font-size:22px;">Customer ID : {{loan.0}}</p>
-<p style="color:white; font-size:22px;">Customer Name : {{loan.1}}</p>
-<p style="color:white; font-size:22px;">Customer Address : {{loan.2}}</p>
-<p style="color:white; font-size:22px;">DOB : {{loan.3}}</p>
-<p style="color:white; font-size:22px;">Credit Score : {{loan.4}}</p>
-<br>
-<button href="{%url 'approve' loanID=loan.0%}" class="btn btn-primary">Approve</a>
-</div>
-=======
+<div style="margin-left:40%; margin-top:5%;">
 <form method="POST">
 {%csrf_token%}
-    <p style="color:white;">Customer ID : {{loan.0}}</p>
-    <p style="color:white;">Customer Name : {{loan.1}}</p>
-    <p style="color:white;">Customer Address : {{loan.2}}</p>
-    <p style="color:white;">DOB : {{loan.3}}</p>
-    <button class="btn btn-primary">Approve</buttom>
->>>>>>> ceb5dfda65c432d43d4cbdbe31df4129c0d68a7c
+    <p style="color:white; font-size:23px;">Customer ID : {{loan.0}}</p>
+    <p style="color:white; font-size:23px;">Customer Name : {{loan.1}}</p>
+    <p style="color:white; font-size:23px;">Customer Address : {{loan.2}}</p>
+    <p style="color:white; font-size:23px;">DOB : {{loan.3}}</p>
+    <br>
+    <button class="btn btn-primary" style="width:31%;">Approve</buttom>
 </form>
+</div>
 {%endblock%}

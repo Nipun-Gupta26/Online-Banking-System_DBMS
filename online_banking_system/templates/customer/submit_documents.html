@@ -1,0 +1,30 @@
+{%extends 'customer/base_customer.html'%}
+
+{%block content%}
+{{user.userID}}
+{%endblock%}
+
+{%block body%}
+<form method = "post" action={%url 'submit_documents'%}>
+    {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal mt-4" style="text-align:center; color:white;">Submit Documents</h1>
+    <div style="margin-left:37%;">
+    <div class="form-floating mt-5">
+      <p style="color:white;">Document Type</p>
+      <select style="width:40%;" name="docType">
+        <option value="Aadhar card">Aadhar card</option>
+        <option value="Pan card">Pan card</option>
+        <option value="Passport">Passport</option>
+      </select>
+      
+    </div>
+    <br>
+    <div class="form-floating">
+      <p style="color:white;">Document File</p>
+      <input type="text" class="form-control" id="floatingPassword" placeholder="Password" name = "docFile" style="width:40%; height:30px; padding:1%;">
+    </div>
+  
+    <button class="btn btn-lg btn-primary mt-5" type="submit" style="width:10%;">Create</button>
+  </div>
+  </form>
+{%endblock%}
