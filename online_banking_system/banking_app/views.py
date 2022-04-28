@@ -209,7 +209,7 @@ def generate_passbook(request):
     
     with connection.cursor() as cursor:
         
-        query1 = "select customerID from user where userID = {}".format(user.userID)
+        query1 = "select customerID from customer where userID = {}".format(user.userID)
         cursor.execute(query1)
         cid = cursor.fetchall()[0][0]
         query2 = "select * from transactions where customerCredited = {} and customerDebited != {}".format(cid, cid)
@@ -224,12 +224,9 @@ def generate_passbook(request):
         context = {
             'credit': credit, 
             'debited': debited, 
-            'both': both
+            'both': both,
+            'user':user
         }
-        
-        print(credit)
-        print(debited)
-        print(both)
         
 
     return render(request, 'customer/passbook.html', context)
