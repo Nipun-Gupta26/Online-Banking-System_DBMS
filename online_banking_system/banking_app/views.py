@@ -168,8 +168,13 @@ def generate_passbook(request):
             'debited': debited, 
             'both': both
         }
+        
+        print(credit)
+        print(debited)
+        print(both)
+        
 
-    return render(request, 'passbook.html', context)
+    return render(request, 'customer/passbook.html', context)
 
 def active_loans(request):
     
