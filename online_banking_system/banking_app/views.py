@@ -208,6 +208,7 @@ def generate_passbook(request):
     }
     
     with connection.cursor() as cursor:
+        
         query1 = "select customerID from user where userID = {}".format(user.userID)
         cursor.execute(query1)
         cid = cursor.fetchall()[0][0]
@@ -225,8 +226,13 @@ def generate_passbook(request):
             'debited': debited, 
             'both': both
         }
+        
+        print(credit)
+        print(debited)
+        print(both)
+        
 
-    return render(request, 'passbook.html', context)
+    return render(request, 'customer/passbook.html', context)
 
 def active_loans(request):
     
@@ -346,4 +352,4 @@ def submit_documents(request):
 #banker functions
 
 def verify_documents(request):
-    
+    pass
