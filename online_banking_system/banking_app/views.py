@@ -69,7 +69,7 @@ def loginrequest(request):
                     cust_views(temp[0][0])
                     return redirect('home_customer')
 
-                query3 = 'select empID,empName,empAddress,DOB, branchID from banker where userID = {}'.format(userID)
+                query3 = 'select empID,empName,empAddress,DOB, branchID from banker where userID = {} and user.userType = "banker"'.format(userID)
                 cursor.execute(query3)
                 temp = cursor.fetchall()
                 
@@ -84,6 +84,20 @@ def loginrequest(request):
                     return redirect('home_banker')
                 
                 ##manager login
+                query4 = 'select empID,empName,empAddress,DOB, branchID from banker where userID = {} and user.userType = "manager"'.format(userID)
+                cursor.execute(query4)
+                temp = cursor.fetchall()
+                
+                if len(temp) == 1:
+                    user.setUserID(userID)
+                    user.setPassword(password)
+                    user.setUserName(temp[0][1])
+                    user.setUserAddress(temp[0][2])
+                    user.setDOB(temp[0][3])
+                    del_banker_views()
+                    banker_views(temp[0][4])
+                    return redirect('home_manager')
+
             else : 
                 messages.error(request,'Invalid userID or password')
     return redirect('/')
