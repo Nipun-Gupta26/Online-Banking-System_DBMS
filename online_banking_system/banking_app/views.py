@@ -178,6 +178,8 @@ def generate_passbook(request):
             'user':user
         }
         
+        print(both)
+        
 
     return render(request, 'customer/passbook.html', context)
 
