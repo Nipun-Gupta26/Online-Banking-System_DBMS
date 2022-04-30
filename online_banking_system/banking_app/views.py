@@ -446,7 +446,11 @@ def view_active_loans(request):
 def view_accounts(request):
     context = {}
     with connection.cursor() as cursor:
-        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber" #query 6
+        query = "select branchID from banker where userID = {}".format(user.userID)
+        cursor.execute(query)
+        result = cursor.fetchall()
+        branchID = result[0][0]
+        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where accounts.branchID = {}".format(branchID) #query 6
         cursor.execute(query1)
         result = cursor.fetchall()
         arr = []
