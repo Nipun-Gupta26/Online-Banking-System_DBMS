@@ -522,6 +522,7 @@ def check_account_in_branch(request):
     if request.method=="POST" : 
         with connection.cursor() as cursor :
             branchID = request.POST.get('branchID')
+            print(branchID)
             ##fill query 
             query ="select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where branchID = {}".format(branchID)
             cursor.execute(query)
