@@ -22,7 +22,7 @@
                 <td>{{i.1}}</td>
                 <td>{{i.2}}</td>
                 <td>{{i.3}}</td>
-                {%if i.1 != i.2%}
+                {%if i not in both%}
                 <td style="color:yellow;">Direct Transfer</td>
                 {%else%}
                 <td style="color:green;">Deposit</td>
@@ -50,7 +50,7 @@
                 <td>{{i.1}}</td>
                 <td>{{i.2}}</td>
                 <td>{{i.3}}</td>
-                {%if i.1 != i.2%}
+                {%if i not in both%}
                 <td style="color:orange;">Direct Transfer</td>
                 {%else%}
                 <td style="color:red;">Deposit</td>
