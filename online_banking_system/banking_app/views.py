@@ -82,6 +82,8 @@ def loginrequest(request):
                     del_banker_views()
                     banker_views(temp[0][4])
                     return redirect('home_banker')
+                
+                ##manager login
             else : 
                 messages.error(request,'Invalid userID or password')
     return redirect('/')
@@ -274,13 +276,18 @@ def make_transaction(request):
 def submit_documents(request):
     if request.method == 'POST':
         with connection.cursor() as cursor:
-            docType = request.POST.get('docType', False)
-            docFile = request.POST.get('docFile', False)
+            aadharFile = request.POST.get('aadharFile', False)
+            panFile = request.POST.get('panFile', False)
+            passportFile = request.POST.get('passportFile', False)
             query1 = "select customerID from customer where userID = {}".format(user.userID)
             cursor.execute(query1)
             customerID = cursor.fetchall()[0][0]
-            query2 = "insert into documents values ({}, '{}', '{}')".format(customerID, docType, docFile)
+            query2 = "insert into documents values ({}, '{}', '{}')".format(customerID, 'Aadhar card', aadharFile)
             cursor.execute(query2)
+            query3 = "insert into documents values ({}, '{}', '{}')".format(customerID, 'Pan card', panFile)
+            cursor.execute(query3)
+            query4 = "insert into documents values ({}, '{}', '{}')".format(customerID, 'Passport', passportFile)
+            cursor.execute(query4)
             query5 = "select max(verificationID) from verifies"
             cursor.execute(query5)
             verificationID = cursor.fetchall()[0][0] + 1
@@ -437,7 +444,7 @@ def view_active_loans(request):
 
         
 def view_accounts(request):
-
+    context = {}
     with connection.cursor() as cursor:
         query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber"
         cursor.execute(query1)
@@ -459,6 +466,7 @@ def view_accounts(request):
         
 
 def stats(request) : 
+    context = {}
     with connection.cursor() as cursor : 
         query = 'select count(*) from customer where creditScore > 5.0'
         cursor.execute(query)
@@ -481,3 +489,24 @@ def stats(request) :
         }
         
     return render(request, 'banker/stats.html',context)
+
+### manager view
+def check_account_in_branch(request):
+    context={}
+    if request.method=="POST" : 
+        with connection.cursor as cursor :
+            branchID = request.POST.get('branchID')
+            ##fill query 
+            query =""
+            cursor.execute(query)
+            result = cursor.fetchall()
+            return render(request, 'manager/list_account.html',{'user':user,'result':result})
+        
+    return render('check_account.html',{'user':user})
+
+
+def home_manager(request):
+    context = {
+        'user':user
+    }
+    return render(request, 'manager/home_manager.html', context)

@@ -24,4 +24,5 @@ urlpatterns = [
     path('view_accounts', views.view_accounts, name='view_accounts'),
     path('check_credit_score',views.check_credit_score,name='check_credit_score'),
     path('stats',views.stats,name='stats'),
+    path('check_account_in_branch',views.check_account_in_branch,name='check_account_in_branch'),
 ]

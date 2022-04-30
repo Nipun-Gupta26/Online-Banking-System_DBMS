@@ -1,0 +1,33 @@
+{%extends 'manager/base_manager.html'%}
+
+{%block content%}
+{{user.userName}}
+{%endblock%}
+
+{%block body%}
+<div>
+    <p style="color:white; text-align:center; font-size:30px; margin-top:2%;">Account List<img src="static/wallet.png" width="40px" height="40px"/></p>
+    
+        <div class="card p-2" style="border:none; background-color:black; min-width:13rem; width:100%; margin-left:5%;">
+            <table style="color:white; border:none;">
+                <th>CustomerID</th>
+                <th>Customer Name</th>
+                <th>Account Number</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+                
+                {%for i in account_list%}
+                <tr>
+                <td>{{i.0}}</td>
+                <td>{{i.1}}</td>
+                <td>{{i.2}}</td>
+                <td>{{i.3}}</td>
+                <td style="color:yellow;"><img src="static/rupee.png">{{i.4}}</td>
+                </tr> 
+                {%endfor%}
+            </table>
+        </div>
+            
+</div>
+
+{%endblock%}
