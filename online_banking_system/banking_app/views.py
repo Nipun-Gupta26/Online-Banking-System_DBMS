@@ -472,7 +472,7 @@ def view_accounts(request):
         cursor.execute(query)
         result = cursor.fetchall()
         branchID = result[0][0]
-        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where accounts.branchID = {}".format(branchID) #query 6
+        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where branchID = {}".format(branchID) #query 6
         cursor.execute(query1)
         result = cursor.fetchall()
         arr = []
@@ -523,7 +523,7 @@ def check_account_in_branch(request):
         with connection.cursor as cursor :
             branchID = request.POST.get('branchID')
             ##fill query 
-            query ="select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where accounts.branchID = {}".format(branchID)
+            query ="select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where branchID = {}".format(branchID)
             cursor.execute(query)
             result = cursor.fetchall()
             arr = []
