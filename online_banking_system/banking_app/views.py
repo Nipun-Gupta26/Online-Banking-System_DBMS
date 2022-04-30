@@ -520,12 +520,14 @@ def stats(request) :
 def check_account_in_branch(request):
     context={}
     if request.method=="POST" : 
-        with connection.cursor as cursor :
+        with connection.cursor() as cursor :
             branchID = request.POST.get('branchID')
             ##fill query 
             query ="select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where accounts.branchID = {}".format(branchID)
             cursor.execute(query)
             result = cursor.fetchall()
+            print(result)
+            
             arr = []
             for x in result:
                 temp = []
@@ -534,14 +536,14 @@ def check_account_in_branch(request):
                 temp.append(x[2])
                 temp.append(x[3])
                 temp.append(x[4])
-            arr.append(temp)
+                arr.append(temp)
             context = { 
                 'account_list':arr,
                 'user':user
             }
-            return render(request, 'manager/list_account.html',context)
+            return render(request, 'manager/list_accounts.html',context)
         
-    return render('check_account.html',{'user':user})
+    return render(request,'manager/check_account.html',{'user':user})
 
 
 def home_manager(request):
