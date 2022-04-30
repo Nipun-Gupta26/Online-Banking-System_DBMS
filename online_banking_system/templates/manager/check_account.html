@@ -1,10 +1,15 @@
-{%extends 'banker/base_manager.html'%}
+{%extends 'manager/base_manager.html'%}
 {%block content%}
 {{user.userName}}
 {%endblock%}
 
 {%block body%}
+<form method="POST" action="{%url 'check_account_in_branch'%}">
+    {%csrf_token%}
+<div style="margin-left:35%; margin-top:10%;">
 <p style="color:white;">List all acounts in the branch : </p>
-<input type="password" class="form-control" id="branchIDID" placeholder="BranchID" name = "branchID" style="align:center; width:50%;">
-<button class="btn btn-lg btn-primary mt-5"style="margin-left:32%; width:34.3%;" type="submit">Sign in</button>
+<input type="text" class="form-control" id="branchIDID" placeholder="BranchID" name = "branchID" style="align:center; width:30%;">
+<button class="btn btn-lg btn-primary mt-5"style=" width:34.3%;" type="submit">List</button>
+</div>
+</form>
 {%endblock%}
