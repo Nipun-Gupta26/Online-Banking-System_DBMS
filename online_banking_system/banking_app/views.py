@@ -248,6 +248,12 @@ def make_transaction(request):
         with connection.cursor() as cursor:
             accCredited = request.POST.get('accCredited', False)
             accDebited = request.POST.get('accDebited', False)
+            
+            if accDebited==accCredited : 
+                messages.error(request, 'You cannot transfer money to yourself')
+                print("You cant transfer money to yourself")
+                return redirect('/home_customer')
+            
             amount = int(request.POST.get('amount', False))
             password = request.POST.get('password', False)
             if password == user.password:
