@@ -122,7 +122,7 @@ def sign_out(request):
 def make_account(request):
     if request.method == 'POST':
         with connection.cursor() as cursor:
-            query1 = "select customerID from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID)
+            query1 = "select customerID from verifies where isVerified = {} and customerID in (select customerID from customer where userID = {})".format(1, user.userID) #query 1
             cursor.execute(query1)
             result = cursor.fetchall()
             if len(result) == 1:
@@ -160,7 +160,7 @@ def generate_passbook(request):
         query1 = "select customerID from customer where userID = {}".format(user.userID)
         cursor.execute(query1)
         cid = cursor.fetchall()[0][0]
-        query2 = "select * from transactions where accCredited not in (select accNumber from hasAccount where customerID={}) and accDebited in (select accNumber from hasAccount where customerID={})".format(cid, cid)
+        query2 = "select * from transactions where accCredited not in (select accNumber from hasAccount where customerID={}) and accDebited in (select accNumber from hasAccount where customerID={})".format(cid, cid) #query 2
         query3 = "select * from transactions where accCredited in (select accNumber from hasAccount where customerID={}) and accDebited not in (select accNumber from hasAccount where customerID={})".format(cid, cid)
         query4 = "select * from transactions where accCredited in (select accNumber from hasAccount where customerID={}) and accDebited in (select accNumber from hasAccount where customerID={})".format(cid, cid)
         cursor.execute(query2)
@@ -304,7 +304,7 @@ def approveLoans(request) :
     
     with connection.cursor() as cursor : 
       
-            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loans where isVerified = {} and loanID in (select loanID from customer inner join borrows on customer.customerID = borrows.customerID and creditScore>5.0)'.format(0)
+            query = 'select loanID,amount,dueDate,rate,mortgage,loanType from loans where isVerified = {} and loanID in (select loanID from customer inner join borrows on customer.customerID = borrows.customerID and creditScore>5.0)'.format(0) #query 3
             cursor.execute(query)
             result = cursor.fetchall()
 
@@ -335,7 +335,7 @@ def check_loan_profile(request,loanID) :
             query = 'update loan set isVerified = {} where loanID = {}'.format(1,loanID)
             cursor.execute(query)
             return redirect('/home_banker')
-        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID)
+        query = 'select customerID,customerName,customerAddress,DOB,creditScore from customer where customerID in (select customerID from borrows where loanID = {})'.format(loanID) #query 4
         cursor.execute(query)
         result = cursor.fetchall()
         
@@ -415,7 +415,7 @@ def document_profile(request,customerID):
 def view_active_loans(request):
     context = {}
     with connection.cursor() as cursor:
-        query1 = "select customer.customerID, customerName, loans.loanID, amount, dueDate, rate, loanType from customer inner join borrows on customer.customerID = borrows.customerID inner join loans on borrows.loanID = loans.loanID"
+        query1 = "select customer.customerID, customerName, loans.loanID, amount, dueDate, rate, loanType from customer inner join borrows on customer.customerID = borrows.customerID inner join loans on borrows.loanID = loans.loanID" #query 5
         cursor.execute(query1)
         result = cursor.fetchall()
         arr = []
@@ -439,7 +439,7 @@ def view_active_loans(request):
 def view_accounts(request):
 
     with connection.cursor() as cursor:
-        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber"
+        query1 = "select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber" #query 6
         cursor.execute(query1)
         result = cursor.fetchall()
         arr = []
