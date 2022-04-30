@@ -501,10 +501,23 @@ def check_account_in_branch(request):
         with connection.cursor as cursor :
             branchID = request.POST.get('branchID')
             ##fill query 
-            query =""
+            query ="select customer.customerID, customerName, hasAccount.accNumber, category, balance from customer inner join hasAccount on customer.customerID = hasAccount.customerID inner join accounts on hasAccount.accNumber = accounts.accNumber where accounts.branchID = {}".format(branchID)
             cursor.execute(query)
             result = cursor.fetchall()
-            return render(request, 'manager/list_account.html',{'user':user,'result':result})
+            arr = []
+            for x in result:
+                temp = []
+                temp.append(x[0])
+                temp.append(x[1])
+                temp.append(x[2])
+                temp.append(x[3])
+                temp.append(x[4])
+            arr.append(temp)
+            context = { 
+                'account_list':arr,
+                'user':user
+            }
+            return render(request, 'manager/list_account.html',context)
         
     return render('check_account.html',{'user':user})
 
